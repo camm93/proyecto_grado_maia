@@ -1,0 +1,58 @@
+# docker-compose.gpu.yml — Deploy con GPU NVIDIA
+# ═══════════════════════════════════════════════════════════════════════════════
+# Requiere:
+#   - Docker >= 19.03
+#   - NVIDIA driver instalado en el host
+#   - NVIDIA Container Toolkit (nvidia-docker2):
+#     https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html
+#
+# Uso:
+#   docker compose -f docker-compose.gpu.yml up
+#
+# Verificar GPU en el contenedor:
+#   docker compose -f docker-compose.gpu.yml exec maia python -c \
+#     "import torch; print('CUDA:', torch.cuda.is_available(), 'Device:', torch.cuda.get_device_name(0))"
+# ═══════════════════════════════════════════════════════════════════════════════
+
+version: "3.9"
+
+services:
+  maia:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile.gpu
+    image: maia-rethoric-seg:gpu
+    container_name: maia-rethoric-seg_gpu
+
+    # Acceso a GPU (Compose 1.28+ con compose-spec)
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1            # cambiar a "all" para todas las GPUs, o un número
+              capabilities: [gpu]
+
+    ports:
+      - "${PORT:-8000}:8000"
+
+    environment:
+      - MODELS_DIR=/app/models
+      - T1_DEVICE=cuda
+      - T1_BATCH_SIZE=${T1_BATCH_SIZE:-32}
+      - T1_PRELOAD=true
+      - T1_LOG_PREDICTIONS=${T1_LOG_PREDICTIONS:-false}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+
+    volumes:
+      - ./models:/app/models:ro
+      - ./logs:/app/backend/logs  # writable para predictions logging
+
+    restart: unless-stopped
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s  # más tiempo: el modelo demora en cargarse al startup
