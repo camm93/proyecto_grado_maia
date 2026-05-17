@@ -1,0 +1,33 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Entorno
+.env
+*.env
+
+# Pesos de modelos (demasiado grandes para git — usar enlace de descarga)
+models/*/pytorch_model.bin
+models/*/model.safetensors
+models/*/*.bin
+models/*/*.safetensors
+models/*/*.gguf
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini

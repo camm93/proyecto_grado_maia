@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  maia:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    image: maia-rethoric-seg:latest
+    container_name: maia-rethoric-seg_app
+    ports:
+      - "${PORT:-8000}:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+      - MODELS_DIR=/app/models
+    volumes:
+      # Montar modelos como volumen para no incluirlos en la imagen
+      # (~650 MB por modelo -- demasiado grandes para la imagen Docker)
+      - ./models:/app/models:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
