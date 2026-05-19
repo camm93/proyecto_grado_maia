@@ -1,0 +1,365 @@
+{
+  "notebook_version": "v6",
+  "manifest_version": "6.0",
+  "manifest_generated_at": "2026-05-18",
+  "test_set_t1": "1401 samples gold humano anotados por 2 humanos (200 por clase, 7 clases sin CONTR)",
+  "test_set_size_t1": 1401,
+  "cohen_kappa_t1": 0.6714,
+  "test_set_t2": "anotacion_referencia.csv (170 con consenso interanotador)",
+  "test_set_size_t2": 170,
+  "cohen_kappa_t2": 0.6995,
+  "kappa_interpretation_t2": "sustancial (Landis & Koch 1977)",
+  "test_balance_t2": {
+    "ES_CONTRIBUCION": 81,
+    "NO_ES_CONTRIBUCION": 89
+  },
+  "drive_folder_url": "https://drive.google.com/drive/folders/1zAdw781nvc46oWOWbkHLDuKNJG9uzh6G",
+  "models": {
+    "scibeto-es-t1": {
+      "_comment": "Modelo T1 — segmentación retórica multi-clase (7 etiquetas, sin CONTR). Re-entrenado en v6 (run task1-scibeto-v12-cris) sobre data batches 1-4 desde SciBETO-large base. F1 macro = 0.40 sobre 1401 samples gold humano (200 por clase, anotación de 2 humanos).",
+      "task": "T1",
+      "description": "SciBETO-ES T1 (SciBETO-large fine-tuned v12) para segmentación retórica",
+      "zip": {
+        "filename": "scibeto-es-t1.zip",
+        "drive_url": "https://drive.google.com/file/d/1XZ_bNv4nNDS636caQg3z9rpNU04Gy-57/view?usp=sharing",
+        "drive_file_id": "1XZ_bNv4nNDS636caQg3z9rpNU04Gy-57",
+        "size_mb": 1260.3,
+        "sha256": "418471488863358e2310c999e3bce15dd8871670805745b66f013e0954707665",
+        "md5": "23239bcfc0c8a960eb8ce2a0f1176532"
+      },
+      "extracted_dir": "scibeto-es-t1",
+      "files": [
+        {
+          "path": "config.json",
+          "sha256": "30864aacac660e765d3d3ff5f6d088cc9cd17144018a594e3f6b6fcd7ecc1981",
+          "md5": "1b81a82068958c39c4ce468b73fa41a0",
+          "required": true
+        },
+        {
+          "path": "model.safetensors",
+          "sha256": "9584c6ce45747f42a65a44e951c618866603fec9ea69ed8425221db26687d88a",
+          "md5": "111fcd76c8f2323981e64e390bfd2461",
+          "required": true
+        },
+        {
+          "path": "tokenizer.json",
+          "sha256": "f6844722b120ba851adcddc9c9223eb74e404c79c2ba4285b2c66eed7b365eca",
+          "md5": "e9f6a2dce3b5fe280751cd482ce6209d",
+          "required": true
+        },
+        {
+          "path": "tokenizer_config.json",
+          "sha256": "776c3d8995a31e68708b2ef090352b48ef6dfc3b398f2d4d8af13449b485c990",
+          "md5": "15b2c1825006e395868edd8d5a662fa6",
+          "required": true
+        },
+        {
+          "path": "training_args.bin",
+          "sha256": "09499a7dc8c171e7f4c904c0e10e942ddd771de154bf7e743178cc03a73ad766",
+          "md5": "c88da9cf2f2d345d28dfe401b751ae90",
+          "required": false,
+          "_comment": "Archivo del Trainer de HF; no es necesario para inferencia pero conviene tenerlo por consistencia"
+        }
+      ],
+      "metrics": {
+        "f1_macro": 0.4001,
+        "f1_micro": 0.4011,
+        "accuracy": 0.4011,
+        "test_set_size": 1401,
+        "test_set_description": "Anotación humana de 2 anotadores, ~200 samples por clase, 7 clases sin CONTR (INTRO, BACK, METH, RES, DISC, LIM, CONC)",
+        "per_class_f1": {
+          "INTRO": 0.39,
+          "BACK": 0.39,
+          "METH": 0.52,
+          "RES": 0.33,
+          "DISC": 0.29,
+          "LIM": 0.47,
+          "CONC": 0.41
+        },
+        "training": {
+          "base_model": "Flaglab/SciBETO-large",
+          "epochs": 3,
+          "learning_rate": 2e-05,
+          "batch_size": 24,
+          "grad_accum": 2,
+          "max_tokens": 512,
+          "precision": "bf16",
+          "seed": 42,
+          "data_batches": "1-4"
+        }
+      }
+    },
+    "scibeto-es-t2": {
+      "_comment": "Modelo T2 baseline text-only (RECOMENDADO en producción). F1 macro = 0.852 [IC 95%: 0.793, 0.900] sobre 170 gold.",
+      "task": "T2",
+      "description": "SciBETO-large text-only fine-tuned para detección binaria de contribuciones",
+      "zip": {
+        "filename": "scibeto-es-t2.zip",
+        "drive_url": "https://drive.google.com/file/d/1rhdZN5mGDrizkNZdtFK0ibR8vT3tn5AI/view?usp=sharing",
+        "drive_file_id": "1rhdZN5mGDrizkNZdtFK0ibR8vT3tn5AI",
+        "size_mb": 1320.8,
+        "sha256": "4a996e10913778f601007d91cd58f998a938925797b36ef79e8c0501deec9b09",
+        "md5": "9d78608de6d4a777891ce00c66e7544a"
+      },
+      "extracted_dir": "scibeto-es-t2",
+      "files": [
+        {
+          "path": "config.json",
+          "sha256": "5a9b59ba2dbdc9e66f3d9e6a9f181b9dd579feb538d2771ba977557dc47a22ab",
+          "md5": "d0eab3bdfe96aeb3c1cf1be0fea71c46",
+          "required": true
+        },
+        {
+          "path": "eval_metrics.json",
+          "sha256": "8d69b720e5fa71de91193e9abf4aafbf0d98691392ec346cc67ed660f7c39613",
+          "md5": "0e1b33c4901164ca539409d33219c091",
+          "required": true,
+          "_comment": "Backend lee este JSON para conocer el threshold óptimo y métricas reportadas"
+        },
+        {
+          "path": "model.safetensors",
+          "sha256": "1d5354773be1ee7af5c0adcaa9e1df409d4e0bcbd1ec471b00e4c566a4310a2e",
+          "md5": "b5cf80777a313d4436b15c99cee3eeb4",
+          "required": true
+        },
+        {
+          "path": "tokenizer.json",
+          "sha256": "f6844722b120ba851adcddc9c9223eb74e404c79c2ba4285b2c66eed7b365eca",
+          "md5": "e9f6a2dce3b5fe280751cd482ce6209d",
+          "required": true
+        },
+        {
+          "path": "tokenizer_config.json",
+          "sha256": "776c3d8995a31e68708b2ef090352b48ef6dfc3b398f2d4d8af13449b485c990",
+          "md5": "15b2c1825006e395868edd8d5a662fa6",
+          "required": true
+        },
+        {
+          "path": "training_args.bin",
+          "sha256": "2e8ae003461dfb9f31000b9528a433068ea2cb43ddbe0e57fd83d940de6d7382",
+          "md5": "7a1fe502e9e5f907e5b46197d50a20ac",
+          "required": false
+        }
+      ],
+      "metrics": {
+        "f1_macro": 0.8523,
+        "f1_ci_low": 0.7933,
+        "f1_ci_high": 0.8999,
+        "optimal_threshold": 0.525,
+        "auc": 0.9463,
+        "input_format": "raw_text"
+      }
+    },
+    "scibeto-es-t2-ctx": {
+      "_comment": "Modelo T2 con prefijo retórico (ablación A5 del PDF). F1 macro = 0.798 [IC 95%: 0.736, 0.858]. NO recomendado en producción — aprende atajos {sección, posición} → clase (drop 0.31 al randomizar prefijo). Disponible como ablación reproducible.",
+      "task": "T2",
+      "description": "SciBETO-large + prefijo [SECCION:X] [POS:Y]",
+      "zip": {
+        "filename": "scibeto-es-t2-ctx.zip",
+        "drive_url": "https://drive.google.com/file/d/1We2Vjn1AYQYIYtbap-nPyFtd1Kq_Uz4b/view?usp=sharing",
+        "drive_file_id": "1We2Vjn1AYQYIYtbap-nPyFtd1Kq_Uz4b",
+        "size_mb": 1321.8,
+        "sha256": "21c262d65d7f092163afb7472d759723fd3d4bc0f897aebf660b7b212463d9df",
+        "md5": "013aa3e2327c15b4e0c54c72050ff815"
+      },
+      "extracted_dir": "scibeto-es-t2-ctx",
+      "files": [
+        {
+          "path": "config.json",
+          "sha256": "5a9b59ba2dbdc9e66f3d9e6a9f181b9dd579feb538d2771ba977557dc47a22ab",
+          "md5": "d0eab3bdfe96aeb3c1cf1be0fea71c46",
+          "required": true
+        },
+        {
+          "path": "eval_metrics.json",
+          "sha256": "0266477b4d062548ab462525bbf5cf5ac346937bef14c4134786366c158e38d1",
+          "md5": "ea0070b52347a3c45536e40d4670d891",
+          "required": true
+        },
+        {
+          "path": "model.safetensors",
+          "sha256": "2f76cfd2c3560077cb37d965bb5c1622afd9c1194270668c8e87220eff8337ce",
+          "md5": "5ad887d424e6abedf58bfd5a6bcf3e1c",
+          "required": true
+        },
+        {
+          "path": "tokenizer.json",
+          "sha256": "f6844722b120ba851adcddc9c9223eb74e404c79c2ba4285b2c66eed7b365eca",
+          "md5": "e9f6a2dce3b5fe280751cd482ce6209d",
+          "required": true
+        },
+        {
+          "path": "tokenizer_config.json",
+          "sha256": "776c3d8995a31e68708b2ef090352b48ef6dfc3b398f2d4d8af13449b485c990",
+          "md5": "15b2c1825006e395868edd8d5a662fa6",
+          "required": true
+        },
+        {
+          "path": "training_args.bin",
+          "sha256": "f176f16719dcd0ce6560b208f5e0f14a041b4ed1af1fd7ff97d02a504ef39ead",
+          "md5": "e3b33f820fa83569c9d0e875ced42803",
+          "required": false
+        }
+      ],
+      "metrics": {
+        "f1_macro": 0.7977,
+        "f1_ci_low": 0.7358,
+        "f1_ci_high": 0.8576,
+        "optimal_threshold": 0.575,
+        "auc": 0.9166,
+        "input_format": "prefix_context",
+        "prefix_template": "[SECCION:{t1_label}] [POS:{pos_bin}] {text}",
+        "ablations": {
+          "random_prefix_real_text": {
+            "f1_macro": 0.4875,
+            "drop": -0.3103
+          },
+          "real_prefix_empty_text": {
+            "f1_macro": 0.3227,
+            "drop": -0.475
+          }
+        }
+      }
+    }
+  },
+  "llms": {
+    "_comment": "Configuración de los LLM dispatchers. NO requieren descarga de pesos: Llama se carga desde HF Hub al primer uso, GPT vía API. Los SHA de few_shot_examples publican el set k=8 (T2) y k=14 (T1) para auditoría.",
+    "llama-3.1-8b-t1": {
+      "description": "Llama 3.1 8B-Instruct few-shot k=14 (2 por clase x 7) — T1 segmentación retórica",
+      "task": "T1",
+      "f1_macro": 0.3223,
+      "accuracy": 0.355,
+      "unknown_predictions": 6,
+      "inference_time_min": 7.3,
+      "few_shot_sha256": "7d154afd9c19699d1c637f2b98028eff964fbb8e4d3bc4f06005d6093387cec0",
+      "n_few_shot_examples": 14,
+      "evaluated_at": "v3",
+      "test_set_size": 1400,
+      "_comment": "Evaluado en task1_edwin_v3.ipynb §8.2. Parser tolerante con _LLM_LABEL_MAP. Notebook v3 reportó 6/1400 UNKNOWN."
+    },
+    "llama-3.1-8b-t1-zs": {
+      "description": "Llama 3.1 8B-Instruct zero-shot — T1 segmentación retórica (ablación V3)",
+      "task": "T1",
+      "f1_macro": 0.2338,
+      "accuracy": 0.2786,
+      "unknown_predictions": 2,
+      "inference_time_min": 6.4,
+      "n_few_shot_examples": 0,
+      "evaluated_at": "v3",
+      "test_set_size": 1400,
+      "_comment": "Evaluado en task1_edwin_v3.ipynb §8.1. Variante de ablación: contrasta el efecto del few-shot vs ZS para Llama (delta = +0.0885 F1 macro a favor del FS). NO recomendado en producción — peor desempeño que el FS de la misma familia."
+    },
+    "gpt-4o-mini-t1": {
+      "description": "GPT-4o-mini few-shot k=14 + JSON mode + retry exponencial + concurrencia=8 — T1 segmentación retórica",
+      "task": "T1",
+      "f1_macro": 0.4144,
+      "accuracy": 0.4457,
+      "unknown_predictions": 0,
+      "inference_time_min": 4.3,
+      "cost_usd_per_1400": 0.2420,
+      "few_shot_sha256": "7d154afd9c19699d1c637f2b98028eff964fbb8e4d3bc4f06005d6093387cec0",
+      "n_few_shot_examples": 14,
+      "evaluated_at": "v3",
+      "test_set_size": 1400,
+      "_comment": "Evaluado en task1_edwin_v3.ipynb §9.2. JSON mode garantiza salida parseable. En V3 el ZS supera a esta variante (0.447 vs 0.414): el few-shot DEGRADA a GPT en T1 (delta = -0.0326)."
+    },
+    "gpt-4o-mini-t1-zs": {
+      "description": "GPT-4o-mini zero-shot + JSON mode + concurrencia=8 — T1 segmentación retórica (mejor T1)",
+      "task": "T1",
+      "f1_macro": 0.4471,
+      "accuracy": 0.4714,
+      "unknown_predictions": 0,
+      "inference_time_min": 2.9,
+      "cost_usd_per_1400": 0.1402,
+      "n_few_shot_examples": 0,
+      "evaluated_at": "v3",
+      "test_set_size": 1400,
+      "_comment": "Evaluado en task1_edwin_v3.ipynb §9.1. MEJOR modelo de T1 (F1 0.4471). Pareto-óptimo: mejor F1, menor tiempo (2.9 vs 4.3 min) y menor costo ($0.14 vs $0.24) que su variante FS. Recomendado como default T1 en producción."
+    },
+    "llama-3.1-8b-t2": {
+      "description": "Llama 3.1 8B-Instruct zero-shot (greedy decoding)",
+      "task": "T2",
+      "f1_macro": 0.393,
+      "f1_ci_low": 0.3383,
+      "f1_ci_high": 0.4536,
+      "recall_pos": 0.0494,
+      "evaluated_at": "v4"
+    },
+    "llama-3.1-8b-t2-fs8": {
+      "description": "Llama 3.1 8B-Instruct few-shot k=8 (curado manual)",
+      "task": "T2",
+      "f1_macro": 0.3676,
+      "f1_ci_low": 0.3231,
+      "f1_ci_high": 0.4156,
+      "recall_pos": 0.0247,
+      "few_shot_sha256": "4ccc1238b0afcc0b3885d818d911881ce8f372d9c17ed6bc43b918d14e20d509",
+      "evaluated_at": "v5"
+    },
+    "gpt-4o-mini-t2": {
+      "description": "GPT-4o-mini zero-shot vía OpenAI API",
+      "task": "T2",
+      "f1_macro": 0.423,
+      "f1_ci_low": 0.3613,
+      "f1_ci_high": 0.4928,
+      "recall_pos": 0.0988,
+      "cost_usd_per_170": 0.015,
+      "evaluated_at": "v4"
+    },
+    "gpt-4o-mini-t2-fs8": {
+      "description": "GPT-4o-mini few-shot k=8 (curado manual)",
+      "task": "T2",
+      "f1_macro": 0.3804,
+      "f1_ci_low": 0.3322,
+      "f1_ci_high": 0.4342,
+      "recall_pos": 0.037,
+      "cost_usd_per_170": 0.0386,
+      "few_shot_sha256": "4ccc1238b0afcc0b3885d818d911881ce8f372d9c17ed6bc43b918d14e20d509",
+      "evaluated_at": "v5"
+    }
+  },
+  "few_shot_examples_k14": {
+    "sha256": "7d154afd9c19699d1c637f2b98028eff964fbb8e4d3bc4f06005d6093387cec0",
+    "n_examples": 14,
+    "task": "T1",
+    "balance": {
+      "INTRO": 2,
+      "BACK": 2,
+      "METH": 2,
+      "RES": 2,
+      "DISC": 2,
+      "LIM": 2,
+      "CONC": 2
+    },
+    "order": "fixed (INTRO, INTRO, BACK, BACK, ...) — no shuffle, garantiza SHA reproducible",
+    "selection_method": "manual curation by team (Edwin), ejemplos prototípicos cortos por clase",
+    "_note": "Los 14 textos están hardcoded en backend/core/llm_service.py (FEW_SHOT_EXAMPLES_T1) y en el notebook task1_edwin_v2.ipynb §7 (_FEW_SHOT_RAW). Verificar este SHA256 contra el del backend para asegurar consistencia bit-a-bit."
+  },
+  "few_shot_examples_k8": {
+    "sha256": "4ccc1238b0afcc0b3885d818d911881ce8f372d9c17ed6bc43b918d14e20d509",
+    "n_examples": 8,
+    "task": "T2",
+    "balance": {
+      "SI": 4,
+      "NO": 4
+    },
+    "order": "alternated (SI, NO, SI, NO, SI, NO, SI, NO)",
+    "selection_method": "manual curation by team",
+    "domains_covered": [
+      "ML/graphs",
+      "biomedicine/chemistry",
+      "multimodal LLMs",
+      "biomedicine/clinical (positivos)",
+      "surveys",
+      "standard fine-tuning",
+      "optimizer comparisons",
+      "local benchmarks (negativos)"
+    ],
+    "_note": "Los 8 textos completos están hardcoded en backend/core/llm_service.py y en el notebook v5 §13.5. Verificar este SHA256 contra el del backend para asegurar consistencia bit-a-bit."
+  },
+  "release_metadata": {
+    "team": "Grupo 2, MAIA 2026",
+    "project": "FLAG Document Analysis",
+    "submission_date": "18/05/2026",
+    "demo_url": "<a completar tras deploy AWS>"
+  }
+}

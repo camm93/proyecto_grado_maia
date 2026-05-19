@@ -1,0 +1,43 @@
+[Unit]
+Description=MAIA - Analisis Retorico backend (FastAPI + uvicorn)
+Documentation=https://github.com/camm93/proyecto_grado_maia
+After=network-online.target
+Wants=network-online.target
+# Si crashea, no reintentar mas de 5 veces en 5 min (evita boot loops)
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Service]
+Type=exec
+User=ec2-user
+Group=ec2-user
+WorkingDirectory=/home/ec2-user/app
+
+# Cargar HF_TOKEN, OPENAI_API_KEY, HF_HOME, etc.
+EnvironmentFile=/home/ec2-user/app/.env
+
+# Comando de arranque: --no-reload porque en producción no queremos auto-restart
+# en cada cambio de archivo. --skip-install si ya está instalado (idempotente,
+# pero ahorra ~3s al boot).
+ExecStart=/home/ec2-user/app/start.sh --no-reload
+
+# Restart automático si crashea (con backoff para no entrar en loop infinito)
+Restart=on-failure
+RestartSec=10s
+
+# Timeout largo para el primer startup (carga 3 SciBETO + Llama ~2 min en GPU)
+TimeoutStartSec=600
+
+# Logs van a journald (verlos con: sudo journalctl -u maia -f)
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=maia
+
+# Limites de recursos: bajo presion de memoria, evitar que el OOM killer se
+# lleve procesos al azar. En g4dn.xlarge (16 GB RAM) el peor caso son ~3 GB
+# de RAM (la mayoria del peso esta en VRAM via 4-bit).
+MemoryAccounting=true
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target

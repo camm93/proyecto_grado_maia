@@ -1,0 +1,61 @@
+# Dockerfile.gpu — Imagen para deploy con GPU NVIDIA
+# ═══════════════════════════════════════════════════════════════════════════════
+# Usa la imagen base oficial de NVIDIA con CUDA 12.1 y cuDNN 8.
+# Requiere que el host tenga NVIDIA Container Toolkit instalado:
+#   https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html
+#
+# Build:
+#   docker build -f backend/Dockerfile.gpu -t maia-gpu:latest .
+#
+# Run con GPU:
+#   docker run --gpus all -p 8000:8000 -v ./models:/app/models:ro \
+#     -e T1_DEVICE=cuda maia-gpu:latest
+#
+# O con docker-compose: usar docker-compose.gpu.yml
+# ═══════════════════════════════════════════════════════════════════════════════
+
+FROM nvidia/cuda:12.1.1-runtime-ubuntu22.04
+
+# Python 3.11 (compatible con torch>=2.4 + CUDA 12.1)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3.11 \
+    python3.11-venv \
+    python3-pip \
+    curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && ln -sf /usr/bin/python3.11 /usr/bin/python
+
+WORKDIR /app
+
+# Copiar requirements primero (optimiza cache de capas)
+COPY backend/requirements.txt ./backend/requirements.txt
+
+# Instalar torch con soporte CUDA 12.1 ANTES de otras dependencias
+# (la wheel oficial de torch trae CUDA bundled, no usa la del sistema)
+RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cu121
+RUN pip install --no-cache-dir -r backend/requirements.txt
+
+# Bajada de modelos desde HF Hub o S3 al arranque (opcional, ver scripts/)
+COPY scripts/ ./scripts/
+RUN chmod +x ./scripts/*.sh
+
+COPY backend/ ./backend/
+COPY frontend/ ./frontend/
+
+# models/ se monta como volumen (o se baja en runtime con scripts/download_models.sh)
+
+EXPOSE 8000
+
+# Variables por defecto para GPU
+ENV T1_DEVICE=cuda
+ENV T1_PRELOAD=true
+ENV T2_DEVICE=cuda
+ENV T2_PRELOAD=true
+
+# Entrypoint: opcionalmente baja modelos antes de servir.
+# Si DOWNLOAD_MODELS_ON_START=true → corre scripts/download_models.sh
+# Si no → arranca uvicorn directo.
+COPY scripts/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
