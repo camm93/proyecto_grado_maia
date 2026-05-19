@@ -1,0 +1,38 @@
+# Versiones sin pin — pip resuelve la wheel precompilada compatible
+# con tu Python 3.14 en Windows x64 sin necesitar compilar Rust/MSVC
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.6
+pydantic>=2.10.0          # 2.10+ tiene wheels para Python 3.14
+python-multipart>=0.0.12
+aiofiles>=23.2.1
+
+# Carga automática de .env al startup (backend/main.py). uvicorn[standard]
+# ya lo trae transitivamente, pero lo declaramos explícito para que el
+# import no dependa de un detalle de su tree de deps.
+python-dotenv>=1.0.0
+
+# ───────────────────────────────────────────────────────────────────────
+# Modelos reales — REQUERIDO para T1 SciBETO V5 fine-tuned.
+# Si no se necesita inferencia con modelos locales, comentar estas líneas
+# y el sistema usará el motor heurístico por defecto.
+# ───────────────────────────────────────────────────────────────────────
+transformers>=4.45.0
+torch>=2.4.0
+
+# Sincronización de pesos desde Google Drive (model_sync.py).
+# gdown >=6.0 maneja automáticamente la pantalla de virus-scan de Drive
+# para archivos >100MB y extrae el file_id de cualquier formato de URL
+# (incluyendo share-links https://drive.google.com/file/d/.../view).
+# El código en model_sync.py también es compatible con gdown 5.x via
+# inspect.signature, pero recomendamos 6.x.
+gdown>=6.0.0,<7.0.0
+
+# LLMs vía API — habilitados en v6 para gpt-4o-mini-t1 y gpt-4o-mini-t2(-fs8).
+# openai 1.0+ tiene cliente sync y async (AsyncOpenAI) usado en llm_service.
+openai>=1.47.0
+
+# Llama T1+T2 via Hugging Face: bitsandbytes para 4-bit quantization
+# (solo Linux+CUDA; en Windows desktop o CPU, llm_service hace fallback).
+# accelerate es requerido por transformers para device_map='auto'.
+bitsandbytes>=0.43.0; sys_platform == 'linux'
+accelerate>=0.30.0

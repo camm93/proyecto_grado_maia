@@ -1,0 +1,415 @@
+:root {
+  --r:10px;
+  --rgb-intro:59,130,246; --rgb-back:139,92,246;  --rgb-meth:245,158,11;
+  --rgb-res:16,185,129;   --rgb-disc:6,182,212;    --rgb-contr:239,68,68;
+  --rgb-lim:249,115,22;   --rgb-conc:99,102,241;
+}
+[data-theme="dark"]{
+  --bg:#0C1017; --surf:#141B26; --surf2:#1C2535;
+  --brd:rgba(255,255,255,.08); --brd2:rgba(255,255,255,.16);
+  --tx:#E8EDF5; --mu:#7A8BA8; --acc:#4F8EF7;
+  --pg:#1C2535; --pgsh:rgba(0,0,0,.5); --ha:.22; --hb:.4;
+}
+[data-theme="light"]{
+  --bg:#EEF2FA; --surf:#FFFFFF; --surf2:#F4F7FC;
+  --brd:rgba(0,0,0,.09); --brd2:rgba(0,0,0,.18);
+  --tx:#1A2233; --mu:#6B7A9A; --acc:#2563EB;
+  --pg:#FFFFFF; --pgsh:rgba(0,0,0,.1); --ha:.11; --hb:.28;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:15px;scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;
+  font-weight:400;line-height:1.6;min-height:100vh;transition:background .2s,color .2s}
+.shell{display:grid;grid-template-rows:58px 1fr;height:100vh}
+header{background:var(--surf);border-bottom:1px solid var(--brd);padding:0 1.4rem;
+  display:flex;align-items:center;justify-content:space-between;transition:background .2s}
+.logo-wrap{display:flex;align-items:center;gap:.7rem}
+.logo-img{height:32px;width:auto;object-fit:contain}
+.logo-sep{width:1px;height:22px;background:var(--brd2)}
+.logo-sub{font-size:.93rem;color:var(--tx);font-weight:600;letter-spacing:-.01em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hdr-right{display:flex;align-items:center;gap:.6rem}
+.theme-btn{background:none;border:1px solid var(--brd2);border-radius:8px;
+  width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:1rem;color:var(--tx);transition:background .15s}
+.theme-btn:hover{background:var(--surf2)}
+.spill{font-size:.73rem;font-family:'JetBrains Mono',monospace;padding:.18rem .65rem;
+  border-radius:99px;display:flex;align-items:center;gap:.35rem;
+  background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.3);color:#10B981}
+.spill.off{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3);color:#EF4444}
+.sdot{width:6px;height:6px;border-radius:50%;background:currentColor;animation:pu 2s infinite}
+@keyframes pu{0%,100%{opacity:1}50%{opacity:.35}}
+.main{display:grid;grid-template-columns:355px 1fr;height:calc(100vh - 58px);overflow:hidden}
+/* ── left ── */
+.pleft{background:var(--surf);border-right:1px solid var(--brd);
+  display:flex;flex-direction:column;overflow:hidden;transition:background .2s}
+.ps{padding:1rem 1.2rem;border-bottom:1px solid var(--brd);flex-shrink:0}
+/* La última sección (textarea) ocupa TODO el espacio restante */
+.ps:last-child{border-bottom:none;flex:1;display:flex;flex-direction:column;overflow:hidden}
+.slbl{font-size:.67rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--mu);margin-bottom:.55rem}
+.msel{width:100%;background:var(--surf2);border:1px solid var(--brd);border-radius:8px;
+  padding:.52rem .8rem;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:.84rem;
+  cursor:pointer;outline:none;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 11 11'%3E%3Cpath fill='%237A8BA8' d='M5.5 7.5L1 2.5h9z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right .8rem center;
+  padding-right:2rem;transition:border-color .2s;margin-bottom:.45rem}
+.msel:focus{border-color:var(--acc)}
+.mdesc{font-size:.72rem;color:var(--mu);line-height:1.4;padding:.4rem .65rem;
+  background:rgba(128,128,128,.06);border:1px solid var(--brd);border-radius:6px;margin-bottom:.35rem}
+.mavail{font-size:.71rem;display:flex;align-items:center;gap:.3rem}
+.aok{color:#10B981} .apend{color:var(--mu)}
+/* upload */
+.upz{border:1.5px dashed var(--brd2);border-radius:var(--r);padding:.65rem .9rem;
+  text-align:center;cursor:pointer;transition:border-color .2s,background .2s;
+  position:relative;margin-bottom:.6rem}
+.upz:hover{border-color:var(--acc);background:rgba(79,142,247,.04)}
+.upz input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}
+.upico{font-size:1.2rem;margin-bottom:.15rem}
+.uptxt{font-size:.76rem;color:var(--mu)}
+.uptxt strong{color:var(--acc)}
+textarea{width:100%;resize:none;flex:1;min-height:80px;
+  background:var(--surf2);border:1px solid var(--brd);border-radius:var(--r);
+  padding:.8rem;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:.84rem;
+  line-height:1.65;outline:none;transition:border-color .2s}
+textarea:focus{border-color:var(--acc)}
+textarea::placeholder{color:var(--mu)}
+.btnp{width:100%;margin-top:.6rem;background:var(--acc);color:#fff;border:none;
+  border-radius:var(--r);padding:.7rem;font-family:'DM Sans',sans-serif;
+  font-size:.88rem;font-weight:600;cursor:pointer;transition:opacity .2s,transform .1s;
+  display:flex;align-items:center;justify-content:center;gap:.45rem}
+.btnp:hover{opacity:.9} .btnp:active{transform:scale(.99)} .btnp:disabled{opacity:.4;cursor:not-allowed}
+.btnex{width:100%;margin-top:.35rem;background:none;border:1px solid var(--brd2);
+  border-radius:var(--r);padding:.55rem;color:var(--mu);
+  font-family:'DM Sans',sans-serif;font-size:.8rem;cursor:pointer;transition:all .15s}
+.btnex:hover{border-color:var(--acc);color:var(--acc);background:rgba(79,142,247,.05)}
+.spin{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);
+  border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+/* legend */
+.lgnd{display:flex;flex-wrap:wrap;gap:.3rem}
+.lgit{display:flex;align-items:center;gap:.28rem;font-size:.7rem;color:var(--mu)}
+.lgdt{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.lginfo{margin-top:.5rem;font-size:.69rem;color:var(--mu);line-height:1.4}
+/* ── right ── */
+/* ── Panel derecho — layout sticky en tres zonas ── */
+.pright{
+  display:flex;flex-direction:column;
+  height:100%;           /* hereda la altura del grid cell */
+  background:var(--bg);overflow:hidden;transition:background .2s;
+}
+/* #res ocupa TODO el espacio cuando está visible */
+#res{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
+/* Zona fija superior: meta strip + distribución retórica */
+.pright-top{
+  flex-shrink:0;padding:.75rem 1.8rem .5rem;
+  border-bottom:1px solid var(--brd);background:var(--bg);
+}
+/* Zona scrolleable: solo las páginas del documento */
+.pright-scroll{
+  flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;
+  padding:.8rem 1.8rem .4rem;
+}
+/* Zona fija inferior: exportación */
+.pright-bottom{
+  flex-shrink:0;padding:.5rem 1.8rem .7rem;
+  border-top:1px solid var(--brd);background:var(--bg);
+}
+.empty{height:100%;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:.9rem;color:var(--mu);text-align:center}
+.eico{font-size:3.2rem;opacity:.22}
+.empty h2{font-family:'DM Serif Display',serif;font-size:1.25rem;opacity:.45;color:var(--tx)}
+.empty p{font-size:.84rem;max-width:340px}
+/* kpi */
+/* KPIs eliminados — métricas movidas al meta strip */
+/* meta */
+.meta{background:var(--surf);border:1px solid var(--brd);border-radius:var(--r);
+  padding:.45rem 1rem;display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap;
+  font-size:.74rem;color:var(--mu);margin-bottom:.6rem;transition:background .2s}
+.mv{color:var(--tx);font-weight:500;font-family:'JetBrains Mono',monospace}
+/* dist — KPIs retóricos en línea horizontal */
+.dcard{background:var(--surf);border:1px solid var(--brd);border-radius:var(--r);
+  padding:.7rem 1.15rem;transition:background .2s}
+.dtit{font-size:.67rem;font-weight:700;color:var(--mu);margin-bottom:.6rem;
+  text-transform:uppercase;letter-spacing:.06em}
+.drows{display:flex;flex-wrap:nowrap;gap:.45rem;overflow-x:auto;padding-bottom:.1rem}
+.drow{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;
+  gap:.2rem;background:var(--surf2);border:1px solid var(--brd);
+  border-radius:8px;padding:.45rem .35rem;text-align:center;transition:background .2s}
+.drow:hover{border-color:var(--brd2)}
+.dlbl{font-size:.62rem;color:var(--mu);white-space:nowrap;
+  display:flex;align-items:center;gap:.25rem;justify-content:center}
+.dlbl-dot{width:7px;height:7px;border-radius:2px;flex-shrink:0}
+.dval{font-size:1.05rem;font-weight:700;line-height:1;font-family:'DM Sans',sans-serif}
+.dpct{font-size:.6rem;color:var(--mu)}
+/* pages — tamaño fijo de hoja según formato detectado */
+.pages{display:flex;flex-direction:column;align-items:center;gap:1.6rem}
+/* Formatos en px a ~82 DPI. Se aplica via data-format en .pages */
+.ppage{
+  background:var(--pg);border-radius:2px;
+  box-shadow:0 3px 18px var(--pgsh),0 1px 4px rgba(0,0,0,.15);
+  position:relative;font-size:.88rem;line-height:1.88;
+  color:var(--tx);transition:background .2s;
+  flex-shrink:0;
+  /* padding interior tipo margen de hoja */
+  padding:3rem 3.6rem 3.5rem;
+  /* Carta por defecto */
+  width:680px; min-height:880px;
+}
+/* A4 */
+.pages[data-fmt="A4"]    .ppage { width:662px; min-height:937px; }
+/* Carta — default, declarar explícito también */
+.pages[data-fmt="Carta"] .ppage { width:680px; min-height:880px; }
+/* Oficio / Legal */
+.pages[data-fmt="Oficio"].ppage  { width:680px; min-height:1120px; }
+/* Folio */
+.pages[data-fmt="Folio"] .ppage  { width:680px; min-height:1040px; }
+
+/* etiqueta de formato visible en el header de página */
+.pfmt{font-size:.62rem;background:var(--surf2);border:1px solid var(--brd);
+  border-radius:4px;padding:.1rem .45rem;color:var(--mu);font-family:'JetBrains Mono',monospace;}
+.phdr{position:absolute;top:1.1rem;left:3.6rem;right:3.6rem;display:flex;
+  justify-content:space-between;align-items:center;font-size:.63rem;color:var(--mu);
+  border-bottom:1px solid var(--brd);padding-bottom:.38rem}
+.pnum{position:absolute;bottom:1.3rem;right:2rem;font-size:.68rem;color:var(--mu);
+  font-family:'JetBrains Mono',monospace}
+/* annotated para */
+.ap{position:relative;margin-bottom:.8rem;padding:.5rem .7rem;
+  border-radius:5px;border-left:3px solid transparent;transition:background .15s;cursor:default}
+.ap:hover .tip{opacity:1;pointer-events:auto}
+/* v7.7: cuando el usuario inspecciona una contribución dentro del párrafo,
+   suprimir el tooltip retórico para evitar que ambos tooltips se solapen
+   visualmente en la parte superior izquierda del párrafo (caso típico:
+   contribución detectada al inicio del párrafo).
+   :has() soporta Chrome 105+ / Safari 15.4+ / Firefox 121+, todos liberados
+   antes de 2024 — universalmente disponible en navegadores modernos. */
+.ap:has(.contr-sent:hover) .tip{opacity:0}
+/* tooltip */
+.tip{position:absolute;top:-2.6rem;left:0;z-index:60;
+  background:var(--surf);border:1px solid var(--brd2);border-radius:7px;
+  padding:.3rem .6rem;font-size:.69rem;white-space:nowrap;
+  display:flex;align-items:center;gap:.45rem;
+  opacity:0;pointer-events:none;transition:opacity .15s;
+  box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.bt1{font-size:.67rem;font-weight:600;padding:.13rem .48rem;border-radius:4px}
+.bt2y{font-size:.67rem;font-weight:600;padding:.13rem .48rem;border-radius:4px;
+  color:#fff;background:#EF4444}
+.bt2n{font-size:.67rem;padding:.13rem .48rem;border-radius:4px;
+  color:var(--mu);border:1px solid var(--brd)}
+.cm{display:flex;align-items:center;gap:.3rem}
+.ctrk{width:44px;height:3px;background:rgba(128,128,128,.2);border-radius:99px}
+.cfil{height:100%;border-radius:99px}
+@keyframes fu{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+.ani{animation:fu .28s ease both}
+/* ── Oración con contribución (T2) ── */
+.contr-sent{
+  background:rgba(239,68,68,.18);border-radius:3px;
+  padding:0 2px;box-decoration-break:clone;-webkit-box-decoration-break:clone;
+  position:relative;cursor:default;
+  transition:background .15s;
+}
+.contr-sent:hover{
+  background:rgba(239,68,68,.38);
+  outline:1.5px solid rgba(239,68,68,.6);
+  outline-offset:1px;
+}
+[data-theme="light"] .contr-sent{background:rgba(239,68,68,.14)}
+[data-theme="light"] .contr-sent:hover{background:rgba(239,68,68,.28)}
+/* Tooltip de oración T2 — mismo estilo que .tip pero anclado abajo */
+.contr-tip{
+  display:none;
+  position:absolute;bottom:calc(100% + 6px);left:0;z-index:70;
+  background:var(--surf);border:1px solid rgba(239,68,68,.5);border-radius:7px;
+  padding:.3rem .65rem;font-size:.72rem;white-space:nowrap;
+  color:#EF4444;font-weight:600;font-family:'DM Sans',sans-serif;
+  box-shadow:0 4px 16px rgba(239,68,68,.2);pointer-events:none;
+  /* flecha abajo */
+}
+.contr-tip::after{
+  content:'';position:absolute;top:100%;left:1rem;
+  border:5px solid transparent;border-top-color:rgba(239,68,68,.5);
+}
+.contr-sent:hover .contr-tip{display:block}
+/* modal */
+#helpModal{transition:opacity .2s}
+#helpModal>div{animation:fu .25s ease both}
+.expcard{background:var(--surf);border:1px solid var(--brd);border-radius:var(--r);
+  padding:1rem 1.15rem;margin-top:1rem;transition:background .2s}
+.exptit{font-size:.7rem;font-weight:600;color:var(--mu);margin-bottom:.75rem;
+  text-transform:uppercase;letter-spacing:.05em}
+.expbtns{display:flex;gap:.6rem;flex-wrap:wrap}
+.expbtn{flex:1;min-width:110px;background:none;border:1px solid var(--brd2);
+  border-radius:8px;padding:.55rem .8rem;color:var(--tx);font-family:'DM Sans',sans-serif;
+  font-size:.82rem;cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;justify-content:center;gap:.4rem}
+.expbtn:hover{border-color:var(--acc);color:var(--acc);background:rgba(79,142,247,.06)}
+@media(max-width:820px){
+  .main{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+  .ppage{padding:2rem 1.4rem}
+  .krow{grid-template-columns:repeat(2,1fr)}
+}
+/* ══ MODAL DE AYUDA ══════════════════════════════════════════════════════════ */
+#helpModal{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);
+  z-index:9000;align-items:center;justify-content:center;padding:1rem;
+  transition:opacity .2s;
+}
+#helpModal.open{display:flex}
+.modal-box{
+  background:var(--surf);border:1px solid var(--brd2);border-radius:14px;
+  max-width:680px;width:100%;max-height:88vh;overflow-y:auto;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  animation:fu .25s ease both;
+}
+.modal-header{
+  padding:1.25rem 1.5rem .75rem;border-bottom:1px solid var(--brd);
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;background:var(--surf);z-index:1;
+  border-radius:14px 14px 0 0;
+}
+.modal-title{font-size:1rem;font-weight:600;display:flex;align-items:center;gap:.6rem}
+.modal-close{
+  background:none;border:1px solid var(--brd2);border-radius:7px;
+  width:30px;height:30px;cursor:pointer;font-size:1rem;color:var(--mu);
+  display:flex;align-items:center;justify-content:center;
+}
+.modal-body{padding:1.25rem 1.5rem;display:flex;flex-direction:column;gap:1.25rem}
+.modal-footer{
+  padding:.85rem 1.5rem;border-top:1px solid var(--brd);
+  display:flex;justify-content:flex-end;
+}
+.modal-close-btn{width:auto;padding:.5rem 1.25rem}
+.modal-section{display:flex;flex-direction:column;gap:.55rem}
+.modal-section-title{
+  font-size:.68rem;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--mu);
+}
+.modal-legend-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.45rem}
+.modal-legend-item{
+  display:flex;align-items:center;gap:.5rem;
+  border-radius:7px;padding:.4rem .7rem;
+}
+.modal-legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.modal-legend-code{font-size:.72rem;color:var(--mu);margin-left:auto}
+.modal-note{
+  font-size:.78rem;color:var(--mu);line-height:1.5;
+  background:rgba(128,128,128,.06);border-radius:8px;
+  padding:.6rem .85rem;border:1px solid var(--brd);
+}
+.modal-contr-box{
+  display:flex;align-items:flex-start;gap:.75rem;
+  background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);
+  border-radius:8px;padding:.75rem 1rem;
+}
+.modal-contr-dot{
+  width:14px;height:14px;border-radius:3px;background:rgba(239,68,68,.35);
+  flex-shrink:0;margin-top:.15rem;display:inline-block;
+}
+.modal-text{font-size:.8rem;color:var(--mu);line-height:1.6}
+.modal-list{margin:.4rem 0 0 1.1rem;display:flex;flex-direction:column;gap:.2rem}
+.modal-grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:.45rem;font-size:.8rem}
+.modal-card{
+  background:rgba(128,128,128,.06);border:1px solid var(--brd);
+  border-radius:8px;padding:.55rem .8rem;
+}
+.modal-avail-row{display:flex;align-items:center;gap:.4rem;margin-bottom:.3rem}
+.help-btn{font-size:.95rem;font-weight:700;font-family:'DM Sans',sans-serif}
+
+/* ══ MODAL ABOUT US ══════════════════════════════════════════════════════════ */
+#aboutModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);
+  z-index:9000;align-items:center;justify-content:center;padding:1rem;transition:opacity .2s}
+#aboutModal.open{display:flex}
+/* Integrantes */
+.about-member{display:flex;align-items:center;gap:.85rem;
+  padding:.6rem .8rem;border-radius:8px;transition:background .15s}
+.about-member:hover{background:var(--surf2)}
+.about-avatar{width:38px;height:38px;border-radius:10px;display:flex;
+  align-items:center;justify-content:center;font-size:.78rem;font-weight:700;
+  flex-shrink:0;letter-spacing:.02em}
+.about-name{font-size:.87rem;font-weight:500;color:var(--tx);margin-bottom:.1rem}
+.about-email{font-size:.76rem;color:var(--mu);text-decoration:none;font-family:'JetBrains Mono',monospace}
+.about-email:hover{color:var(--acc);text-decoration:underline}
+
+/* ══ MODAL FEW-SHOTS (v7) ════════════════════════════════════════════════════
+   Modal independiente para mostrar los ejemplos few-shot publicados.
+   Reusa estilos de .modal-box/.modal-header/.modal-body/.modal-footer.
+   Solo agregamos las reglas de los tabs T1/T2. */
+#fewshotModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);
+  z-index:9000;align-items:center;justify-content:center;padding:1rem;transition:opacity .2s}
+#fewshotModal.open{display:flex}
+.fs-tab{background:none;border:none;padding:.55rem 1rem;cursor:pointer;
+  font-size:.82rem;font-weight:500;color:var(--mu);font-family:'DM Sans',sans-serif;
+  border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s,border-color .15s}
+.fs-tab:hover{color:var(--tx)}
+.fs-tab-active{color:var(--acc);border-bottom-color:var(--acc)}
+
+/* ── Filtros KPI ── */
+.drow{cursor:pointer;transition:opacity .2s, transform .15s, box-shadow .15s}
+.drow:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.drow.kpi-inactive{opacity:.22!important;filter:grayscale(.6)}
+.drow.kpi-inactive:hover{opacity:.35!important}
+
+/* ══ AVISO VISTA NO OPTIMIZADA (v7.6) ═══════════════════════════════════════
+   Overlay soft que se muestra en viewports < 900px. Atenua la app de fondo
+   con backdrop-filter:blur y muestra una tarjeta centrada con la opcion
+   "Continuar de todos modos". Tras cerrar (body.mn-dismissed) el overlay
+   desaparece y queda visible un badge discreto en el header como
+   recordatorio. La decision persiste en localStorage (clave
+   maia_mn_dismissed_v76 — la version en la clave permite invalidar el
+   opt-out cuando se publiquen mejoras mobile en una version futura).
+═══════════════════════════════════════════════════════════════════════════ */
+#mobileNotice{
+  display:none;position:fixed;inset:0;z-index:10000;
+  background:rgba(0,0,0,.55);
+  -webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);
+  align-items:center;justify-content:center;padding:1rem;
+  animation:fu .25s ease both;
+}
+.mn-card{
+  background:var(--surf);border:1px solid var(--brd2);border-radius:14px;
+  max-width:420px;width:100%;padding:1.6rem 1.4rem;
+  box-shadow:0 20px 60px rgba(0,0,0,.4);
+  text-align:center;
+}
+.mn-icon{font-size:2.2rem;margin-bottom:.7rem;line-height:1}
+.mn-title{
+  font-size:1.05rem;font-weight:700;color:var(--tx);
+  margin-bottom:.8rem;line-height:1.35;
+  font-family:'DM Sans',sans-serif;
+}
+.mn-body{
+  font-size:.84rem;color:var(--mu);line-height:1.6;
+  margin-bottom:1.3rem;
+}
+.mn-btn{
+  background:var(--acc);color:#fff;border:none;border-radius:8px;
+  padding:.7rem 1.4rem;font-family:'DM Sans',sans-serif;
+  font-size:.86rem;font-weight:600;cursor:pointer;
+  transition:opacity .15s;width:100%;
+}
+.mn-btn:hover{opacity:.9}
+.mn-btn:active{transform:scale(.99)}
+
+/* Badge persistente — oculto por defecto, solo se muestra en mobile
+   dismissed (ver media query mas abajo). El badge es clickeable y vuelve
+   a abrir el aviso completo (util si el evaluador quiere releer el
+   mensaje despues de haberlo cerrado). */
+#mobileBadge{
+  display:none;align-items:center;gap:.3rem;
+  font-size:.7rem;font-family:'JetBrains Mono',monospace;
+  padding:.18rem .6rem;border-radius:99px;
+  background:rgba(245,158,11,.15);
+  border:1px solid rgba(245,158,11,.4);
+  color:#D97706;cursor:pointer;white-space:nowrap;
+  transition:opacity .15s;
+}
+#mobileBadge:hover{opacity:.75}
+[data-theme="dark"] #mobileBadge{color:#F59E0B}
+
+/* Reglas de visibilidad — solo activas debajo de 900px */
+@media(max-width:899px){
+  /* Mostrar overlay si el usuario NO lo ha cerrado todavia */
+  body:not(.mn-dismissed) #mobileNotice{display:flex}
+  /* Mostrar badge discreto si el usuario YA cerro el aviso */
+  body.mn-dismissed #mobileBadge{display:inline-flex}
+}

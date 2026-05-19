@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>MAIA · Segmentación Retórica de Documentos Científicos en Español · Detección de Contribuciones</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" href="/static/assets/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+<div class="shell">
+
+<!-- ══ HEADER ══════════════════════════════════════════════════════════════ -->
+<header>
+  <div class="logo-wrap">
+    <img class="logo-img" src="/static/assets/logo.jpg" alt="MAIA">
+    <div class="logo-sep"></div>
+    <span class="logo-sub">MAIA &mdash; Segmentación Retórica de Documentos Científicos en Español &middot; Detección de Contribuciones</span>
+  </div>
+  <div class="hdr-right">
+    <!-- Badge discreto: visible solo en mobile/tablet (<900px) tras haber
+         cerrado el aviso #mobileNotice. Hacer clic re-abre el aviso. -->
+    <span id="mobileBadge" onclick="_reshowMobileNotice()"
+          title="Vista no optimizada para este dispositivo — clic para ver detalles">
+      ⚠ Vista no optimizada
+    </span>
+    <div id="spill" class="spill">
+      <span class="sdot"></span><span id="stxt">conectando…</span>
+    </div>
+    <button class="theme-btn" id="tbtn" onclick="toggleTheme()" title="Cambiar tema">☀️</button>
+    <button class="theme-btn help-btn" onclick="openHelp()" title="Ayuda y leyenda">?</button>
+    <button class="theme-btn" onclick="openFewshot()" title="Ejemplos few-shot publicados (T1 y T2)" style="font-size:.95rem">📚</button>
+    <button class="theme-btn" onclick="openAbout()" title="Acerca del proyecto" style="font-size:.85rem">👥</button>
+  </div>
+</header>
+
+<!-- ══ MODAL ABOUT US ══════════════════════════════════════════════════════ -->
+<div id="aboutModal" onclick="if(event.target===this)closeAbout()">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title">👥 Acerca del Proyecto</span>
+      <button onclick="closeAbout()" class="modal-close">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Título del proyecto -->
+      <div style="text-align:center;padding:.5rem 0 1rem">
+        <div style="font-family:'DM Serif Display',serif;font-size:1.25rem;
+             color:var(--tx);margin-bottom:.4rem;line-height:1.3">
+          Segmentación Automática de Artículos Científicos en Español
+        </div>
+        <div style="font-size:.82rem;color:var(--mu);line-height:1.6">
+          Maestría en Inteligencia Artificial<br>
+          Universidad de los Andes · Colombia · 2026
+        </div>
+        <div style="margin-top:.75rem;display:inline-flex;align-items:center;gap:.5rem;
+             background:rgba(79,142,247,.1);border:1px solid rgba(79,142,247,.25);
+             border-radius:99px;padding:.3rem 1rem;font-size:.78rem;color:var(--acc)">
+          Grupo 2
+        </div>
+      </div>
+
+      <!-- Asesor del proyecto -->
+      <div style="background:rgba(79,142,247,.07);border:1px solid rgba(79,142,247,.25);
+           border-radius:10px;padding:.85rem 1rem;margin-bottom:.5rem">
+        <div style="font-size:.67rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+             color:var(--acc);margin-bottom:.6rem">Asesor</div>
+        <div style="display:flex;align-items:center;gap:.85rem">
+          <div style="width:42px;height:42px;border-radius:10px;background:rgba(79,142,247,.2);
+               color:var(--acc);display:flex;align-items:center;justify-content:center;
+               font-size:.82rem;font-weight:700;flex-shrink:0">RM</div>
+          <div>
+            <div style="font-size:.9rem;font-weight:600;color:var(--tx)">
+              Ph.D. Rubén Francisco Manrique Piramanrique</div>
+            <div style="font-size:.75rem;color:var(--mu)">
+              Departamento de Ingeniería de Sistemas y Computación</div>
+            <a href="mailto:rf.manrique@uniandes.edu.co"
+               style="font-size:.73rem;color:var(--acc);text-decoration:none;
+               font-family:'JetBrains Mono',monospace">
+              rf.manrique@uniandes.edu.co</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div style="border-top:1px solid var(--brd);margin:.25rem 0 .75rem"></div>
+      <div class="modal-section-title" style="margin-bottom:.75rem">Integrantes del equipo</div>
+      <div style="display:flex;flex-direction:column;gap:.55rem">
+
+        <div class="about-member">
+          <div class="about-avatar" style="background:rgba(99,102,241,.15);color:rgb(99,102,241)">SB</div>
+          <div class="about-info">
+            <div class="about-name">Santiago Ballesteros Pastrán</div>
+            <a class="about-email" href="mailto:s.ballesteros@uniandes.edu.co">s.ballesteros@uniandes.edu.co</a>
+          </div>
+        </div>
+
+        <div class="about-member">
+          <div class="about-avatar" style="background:rgba(139,92,246,.15);color:rgb(139,92,246)">EC</div>
+          <div class="about-info">
+            <div class="about-name">Edwin Alexander Cifuentes Bastidas</div>
+            <a class="about-email" href="mailto:ea.cifuentes@uniandes.edu.co">ea.cifuentes@uniandes.edu.co</a>
+          </div>
+        </div>
+
+        <div class="about-member">
+          <div class="about-avatar" style="background:rgba(6,182,212,.15);color:rgb(6,182,212)">NM</div>
+          <div class="about-info">
+            <div class="about-name">Natalia Moncada Suárez</div>
+            <a class="about-email" href="mailto:n.moncadas@uniandes.edu.co">n.moncadas@uniandes.edu.co</a>
+          </div>
+        </div>
+
+        <div class="about-member">
+          <div class="about-avatar" style="background:rgba(59,130,246,.15);color:rgb(59,130,246)">CM</div>
+          <div class="about-info">
+            <div class="about-name">Cristian Alexis Murillo Martínez</div>
+            <a class="about-email" href="mailto:ca.murillom12@uniandes.edu.co">ca.murillom12@uniandes.edu.co</a>
+          </div>
+        </div>
+
+        <div class="about-member">
+          <div class="about-avatar" style="background:rgba(16,185,129,.15);color:rgb(16,185,129)">JP</div>
+          <div class="about-info">
+            <div class="about-name">Juan Pablo Pérez Atehortua</div>
+            <a class="about-email" href="mailto:jp.pereza12@uniandes.edu.co">jp.pereza12@uniandes.edu.co</a>
+          </div>
+        </div>
+
+      </div><!-- /integrantes -->
+
+      <!-- Repositorio del proyecto (v7.5) -->
+      <div style="border-top:1px solid var(--brd);margin:1rem 0 .75rem"></div>
+      <div style="background:rgba(99,102,241,.07);border:1px solid rgba(99,102,241,.25);
+           border-radius:10px;padding:.85rem 1rem">
+        <div style="font-size:.67rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+             color:rgb(99,102,241);margin-bottom:.6rem">Repositorio del proyecto</div>
+        <div style="display:flex;align-items:center;gap:.85rem">
+          <div style="width:42px;height:42px;border-radius:10px;background:rgba(99,102,241,.2);
+               color:rgb(99,102,241);display:flex;align-items:center;justify-content:center;
+               flex-shrink:0">
+            <!-- GitHub mark (SVG inline para no depender de assets externos) -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                 fill="currentColor" aria-hidden="true">
+              <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56
+                       0-.27-.01-1.16-.02-2.1-3.2.7-3.88-1.36-3.88-1.36-.53-1.35-1.29-1.71-1.29-1.71
+                       -1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96
+                       .1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.28 1.19-3.09
+                       -.12-.29-.52-1.46.11-3.04 0 0 .97-.31 3.18 1.18a11.04 11.04 0 0 1 5.79 0c2.2
+                       -1.49 3.17-1.18 3.17-1.18.64 1.58.24 2.75.12 3.04.74.81 1.18 1.83 1.18 3.09
+                       0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14 0 1.55-.01 2.8-.01 3.18
+                       0 .31.21.67.8.56C20.71 21.39 24 17.08 24 12 24 5.65 18.85.5 12 .5z"/>
+            </svg>
+          </div>
+          <div style="min-width:0;flex:1">
+            <div style="font-size:.9rem;font-weight:600;color:var(--tx);margin-bottom:.1rem">
+              proyecto_grado_maia</div>
+            <a href="https://github.com/camm93/proyecto_grado_maia" target="_blank" rel="noopener"
+               style="font-size:.73rem;color:rgb(99,102,241);text-decoration:none;
+               font-family:'JetBrains Mono',monospace;word-break:break-all">
+              https://github.com/camm93/proyecto_grado_maia</a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.modal-body -->
+    <div class="modal-footer">
+      <button onclick="closeAbout()" class="btnp modal-close-btn">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL DE AYUDA ══════════════════════════════════════════════════════ -->
+<div id="helpModal" onclick="if(event.target===this)closeHelp()">
+  <div class="modal-box">
+
+    <div class="modal-header">
+      <span class="modal-title">📖 Guía de uso — MAIA Proyecto Grado G2</span>
+      <button onclick="closeHelp()" class="modal-close">✕</button>
+    </div>
+
+    <div class="modal-body">
+
+      <div class="modal-section">
+        <div class="modal-section-title">Leyenda — Categorías Retóricas (Tarea 1)</div>
+        <div class="modal-legend-grid" id="hLegend"></div>
+        <div class="modal-note">
+          El color de fondo de cada párrafo corresponde a su categoría retórica (T1).
+          El sistema asigna una de las 8 categorías usando patrones léxicos y la
+          posición relativa del párrafo dentro del documento (0 = inicio, 1 = fin).
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">Detección de Contribuciones (Tarea 2)</div>
+        <div class="modal-contr-box">
+          <span class="modal-contr-dot"></span>
+          <div style="font-size:.82rem;line-height:1.55">
+            <strong style="color:#EF4444">ES_CONTRIBUCION</strong> — las oraciones que
+            contienen marcadores de aporte científico se resaltan en rojo dentro del párrafo.<br><br>
+            <span style="color:var(--mu)">T1 y T2 son etiquetas <strong>independientes</strong>:
+            una contribución puede estar dentro de cualquier sección retórica
+            (introducción, metodología, resultados, conclusiones, etc.).</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">Flujo de análisis — dos tareas independientes</div>
+        <div style="display:flex;flex-direction:column;gap:.5rem">
+          <div style="display:flex;align-items:flex-start;gap:.75rem;background:rgba(59,130,246,.08);
+               border:1px solid rgba(59,130,246,.25);border-radius:8px;padding:.7rem .9rem">
+            <span style="background:rgb(59,130,246);color:#fff;border-radius:6px;
+                  padding:.15rem .5rem;font-size:.72rem;font-weight:700;flex-shrink:0">T1</span>
+            <div style="font-size:.81rem;line-height:1.5;color:var(--mu)">
+              <strong style="color:var(--tx)">Segmentación Retórica</strong> — divide el texto en párrafos
+              y clasifica cada uno en una de las 8 etiquetas: INTRO, BACK, METH, RES, DISC, CONTR, LIM, CONC.
+              <br>Endpoint: <code style="font-size:.72rem;background:rgba(128,128,128,.1);
+              padding:.05rem .3rem;border-radius:3px">POST /api/segment</code>
+            </div>
+          </div>
+          <div style="text-align:center;font-size:.75rem;color:var(--mu)">
+            ↓ Los segmentos de T1 se pasan como input a T2
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:.75rem;background:rgba(239,68,68,.08);
+               border:1px solid rgba(239,68,68,.25);border-radius:8px;padding:.7rem .9rem">
+            <span style="background:#EF4444;color:#fff;border-radius:6px;
+                  padding:.15rem .5rem;font-size:.72rem;font-weight:700;flex-shrink:0">T2</span>
+            <div style="font-size:.81rem;line-height:1.5;color:var(--mu)">
+              <strong style="color:var(--tx)">Detección de Contribuciones</strong> — clasifica cada fragmento
+              como <strong style="color:#EF4444">ES_CONTRIBUCION</strong> o NO_ES_CONTRIBUCION, usando el
+              contexto retórico heredado de T1.
+              <br>Endpoint: <code style="font-size:.72rem;background:rgba(128,128,128,.1);
+              padding:.05rem .3rem;border-radius:3px">POST /api/contributions</code>
+            </div>
+          </div>
+        </div>
+        <div class="modal-note" style="margin-top:.5rem">
+          T1 y T2 usan modelos independientes seleccionables por separado.
+          Una contribución puede aparecer en cualquier sección retórica — las etiquetas son ortogonales.
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">Archivos soportados</div>
+        <div class="modal-grid-2">
+          <div class="modal-card">
+            <strong>PDF</strong> — detecta tamaño de hoja (Carta, A4, Oficio, Folio)
+            y número de columnas (1, 2 o 3) automáticamente.
+          </div>
+          <div class="modal-card">
+            <strong>DOCX / DOC</strong> — extrae texto en orden de flujo correcto;
+            detecta tamaño de hoja desde metadatos XML.
+          </div>
+          <div class="modal-card">
+            <strong>TXT</strong> — texto plano. Se asume siempre formato Carta.
+          </div>
+          <div class="modal-card">
+            <strong>Pegado directo</strong> — escribe o pega en el área de texto;
+            se trata como Carta de una sola columna.
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">Modelos disponibles</div>
+        <div class="modal-text">
+          <div class="modal-avail-row"><span class="aok">●</span> <strong>Disponible</strong> — se ejecuta inmediatamente.</div>
+          <div class="modal-avail-row"><span class="apend">○</span> <strong>Pendiente</strong> — usa heurístico como fallback hasta que el artefacto esté listo.</div>
+          El sistema funciona <strong>sin backend</strong> usando la heurística JavaScript local.
+          Con el backend FastAPI activo, los modelos entrenados (SciBETO, mDeBERTa, Llama, GPT‑4o)
+          son accesibles desde el selector.
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">Exportación de resultados</div>
+        <div class="modal-text" style="margin-bottom:.6rem">
+          La barra de exportación aparece siempre anclada en la parte inferior del panel.
+          Los archivos reflejan el <strong>filtro activo</strong> de KPIs (si hay uno aplicado):
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+          <div class="modal-card">
+            <strong>📄 JSON</strong><br>
+            <span style="color:var(--mu);font-size:.78rem">Todos los campos: etiqueta T1, confianza T1, etiqueta T2, confianza T2, texto, posición, zona retórica. Sin filtro.</span>
+          </div>
+          <div class="modal-card">
+            <strong>📊 CSV retórico</strong><br>
+            <span style="color:var(--mu);font-size:.78rem">Tabla plana compatible con Excel/pandas. Incluye posición relativa, zona, categorías T1 y T2 para cada párrafo.</span>
+          </div>
+          <div class="modal-card">
+            <strong>🎯 CSV contribuciones</strong><br>
+            <span style="color:var(--mu);font-size:.78rem">Solo párrafos con ES_CONTRIBUCION, con texto completo, contexto retórico y confianza T2.</span>
+          </div>
+          <div class="modal-card">
+            <strong>🌐 HTML</strong><br>
+            <span style="color:var(--mu);font-size:.78rem">Informe visual standalone con los colores retóricos y highlights de contribuciones. Respeta el filtro activo.<br>Nombre: <code style="font-size:.7rem">rethorical_ALL.html</code> o <code style="font-size:.7rem">rethorical_INTRO_RES.html</code></span>
+          </div>
+          <div class="modal-card">
+            <strong>🖨 PDF</strong><br>
+            <span style="color:var(--mu);font-size:.78rem">Imprime el informe HTML desde el diálogo del navegador (Guardar como PDF). Respeta el filtro activo.<br>Nombre: <code style="font-size:.7rem">rethorical_ALL.pdf</code></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">Filtros de categoría — KPIs interactivos</div>
+        <div class="modal-text">
+          Haz clic en cualquier KPI de la distribución retórica para activar un <strong>filtro visual</strong>:
+          <ul class="modal-list">
+            <li>Los párrafos de otras categorías se atenúan a <em>opacity 8%</em></li>
+            <li>Selección <strong>múltiple</strong>: clic en varios KPIs acumula el filtro</li>
+            <li>Clic de nuevo en un KPI activo lo <strong>elimina</strong> del filtro</li>
+            <li>El KPI <em>Sin cat.</em> (gris) <strong>resetea</strong> el filtro completo</li>
+            <li>Los botones <strong>HTML</strong> y <strong>PDF</strong> exportan solo los párrafos del filtro activo</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">Barra de resultados — ¿qué significa cada campo?</div>
+        <div style="background:var(--surf2);border:1px solid var(--brd);border-radius:8px;
+             padding:.75rem 1rem;font-family:'JetBrains Mono',monospace;font-size:.75rem;
+             color:var(--mu);margin-bottom:.6rem;letter-spacing:.01em">
+          Modelo: <strong style="color:var(--tx)">Heurístico (sin modelo)</strong>
+          &nbsp;·&nbsp; Modo: <strong style="color:var(--tx)">heuristic</strong>
+          &nbsp;·&nbsp; Párrafos: <strong style="color:var(--tx)">8</strong>
+          &nbsp;·&nbsp; Palabras: <strong style="color:var(--tx)">276</strong>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          ⏱ <strong style="color:var(--tx)">3 ms</strong>
+        </div>
+        <div class="modal-text">
+          <ul class="modal-list">
+            <li><strong>Modelo</strong> — nombre del modelo que realizó el análisis.
+              <em>Heurístico (sin modelo)</em> indica que se usó la lógica de reglas léxicas
+              local, sin un modelo de lenguaje entrenado.</li>
+            <li><strong>Modo</strong> — familia del motor de inferencia:
+              <em>heuristic</em> (reglas JS locales), <em>encoder</em> (BERT/DeBERTa fine-tuned),
+              <em>llm_open</em> (Llama / Mistral) o <em>llm_api</em> (GPT-4o / Gemini).</li>
+            <li><strong>Párrafos</strong> — número de párrafos en los que el sistema segmentó
+              el texto. La segmentación se basa en dobles saltos de línea o en grupos de
+              ~50 palabras si el texto no tiene párrafos marcados.</li>
+            <li><strong>Palabras</strong> — total de tokens (palabras separadas por espacio)
+              en el texto analizado. Útil para estimar la densidad del documento.</li>
+            <li><strong>⏱ tiempo</strong> — latencia de inferencia en milisegundos, medida
+              desde que se envía el texto hasta que se recibe la respuesta completa.
+              El modo heurístico es siempre &lt; 20 ms; los encoders ~200–500 ms;
+              los LLM API dependen de la red.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">Distribución retórica (Tarea 1) — ¿qué es el porcentaje?</div>
+        <div class="modal-text">
+          Cada tarjeta de la distribución retórica muestra dos valores para una categoría:
+          <ul class="modal-list">
+            <li><strong>Número (grande)</strong> — cantidad de párrafos del texto clasificados
+              en esa categoría retórica.</li>
+            <li><strong>Porcentaje</strong> — proporción de párrafos en esa categoría respecto
+              al total del texto analizado, calculado como:<br>
+              <code style="background:rgba(128,128,128,.1);padding:.1rem .4rem;border-radius:4px;
+                font-family:'JetBrains Mono',monospace">
+                % = (párrafos en categoría / total párrafos) × 100
+              </code>
+            </li>
+          </ul>
+          Los porcentajes de las 8 categorías suman 100 %. Una categoría con
+          <strong>0 párrafos</strong> muestra 0 % y aparece en gris — indica que ese
+          tipo de contenido retórico no fue identificado en el texto. La distribución
+          esperada en un artículo científico completo suele tener INTRO y BACK al inicio,
+          METH y RES en el cuerpo, y DISC, CONTR, LIM y CONC hacia el final.
+        </div>
+      </div>
+
+    </div><!-- /.modal-body -->
+
+    <div class="modal-footer">
+      <button onclick="closeHelp()" class="btnp modal-close-btn">Cerrar</button>
+    </div>
+
+  </div><!-- /.modal-box -->
+</div><!-- /#helpModal -->
+
+<!-- ══ MODAL FEW-SHOTS ═════════════════════════════════════════════════════
+     Muestra los ejemplos few-shot publicados para auditoria.
+     Datos servidos por el backend en GET /api/few_shots (single source of
+     truth: backend/core/llm_service.py).
+══════════════════════════════════════════════════════════════════════════ -->
+<div id="fewshotModal" onclick="if(event.target===this)closeFewshot()">
+  <div class="modal-box">
+
+    <div class="modal-header">
+      <span class="modal-title">📚 Ejemplos Few-Shot publicados</span>
+      <button onclick="closeFewshot()" class="modal-close">✕</button>
+    </div>
+
+    <div class="modal-body">
+
+      <div class="modal-note" style="margin-bottom:1rem">
+        Estos son los ejemplos curados manualmente por el equipo que se inyectan
+        en el prompt de los LLMs (Llama 3.1 8B y GPT-4o-mini) cuando se selecciona
+        una variante <strong>few-shot</strong> en el catalogo. Las variantes
+        <strong>zero-shot</strong> (sufijo <code style="background:rgba(128,128,128,.1);padding:.05rem .3rem;border-radius:3px;font-family:'JetBrains Mono',monospace">-zs</code>)
+        NO usan estos ejemplos. Los SHA256 publicados permiten auditoria
+        bit-a-bit contra el manifest del release.
+      </div>
+
+      <!-- Tabs -->
+      <div style="display:flex;gap:.4rem;border-bottom:1px solid var(--brd);
+                  margin-bottom:1rem;flex-shrink:0">
+        <button id="fsTabT1" onclick="switchFewshotTab('T1')"
+                class="fs-tab fs-tab-active">
+          Tarea 1 · Segmentacion retorica (k=14)
+        </button>
+        <button id="fsTabT2" onclick="switchFewshotTab('T2')" class="fs-tab">
+          Tarea 2 · Contribuciones (k=8)
+        </button>
+      </div>
+
+      <!-- Meta info (k, balance, orden, sha256) -->
+      <div id="fsMeta" style="background:var(--surf2);border:1px solid var(--brd);
+           border-radius:8px;padding:.75rem 1rem;margin-bottom:.8rem;
+           font-size:.78rem;color:var(--mu);line-height:1.6">
+        Cargando metadatos...
+      </div>
+
+      <!-- Lista de ejemplos -->
+      <div id="fsList" style="display:flex;flex-direction:column;gap:.55rem">
+        <div style="text-align:center;padding:2rem;color:var(--mu);font-size:.85rem">
+          Cargando ejemplos desde el backend...
+        </div>
+      </div>
+
+    </div><!-- /.modal-body -->
+
+    <div class="modal-footer">
+      <button onclick="closeFewshot()" class="btnp modal-close-btn">Cerrar</button>
+    </div>
+
+  </div><!-- /.modal-box -->
+</div><!-- /#fewshotModal -->
+
+<!-- ══ LAYOUT PRINCIPAL ════════════════════════════════════════════════════ -->
+<div class="main">
+
+  <!-- Panel izquierdo -->
+  <aside class="pleft">
+
+    <div class="ps">
+      <div class="slbl">Modelo — Tarea 1 · Segmentación retórica</div>
+      <select class="msel" id="msel" onchange="onMC(this)"></select>
+      <div class="mdesc" id="mdesc">Cargando modelos…</div>
+      <div class="mavail" id="mavail"></div>
+    </div>
+
+    <div class="ps">
+      <div class="slbl">Modelo — Tarea 2 · Detección de contribuciones</div>
+      <select class="msel" id="msel2" onchange="onMC2(this)"></select>
+      <div class="mdesc" id="mdesc2">Cargando modelos…</div>
+      <div class="mavail" id="mavail2"></div>
+    </div>
+
+    <div class="ps" style="display:flex;flex-direction:column;overflow:hidden">
+      <div class="slbl">Texto o archivo</div>
+      <div class="upz" id="upz" style="flex-shrink:0">
+        <input type="file" id="fi" accept=".txt,.doc,.docx,.pdf" onchange="handleFile(event)">
+        <div class="upico">📄</div>
+        <div class="uptxt">
+          Arrastra un archivo o <strong>haz clic</strong><br>
+          <span style="font-size:.68rem">TXT &middot; DOC &middot; DOCX &middot; PDF</span>
+        </div>
+      </div>
+      <textarea id="inp"
+        placeholder="O escribe / pega el texto aquí…&#10;&#10;El sistema identificará las partes retóricas (T1) y detectará las contribuciones científicas (T2) de forma independiente."></textarea>
+      <div style="flex-shrink:0">
+        <button class="btnp" id="abtn" onclick="analyze()">
+          <span id="bico">▶</span><span id="btxt">Analizar</span>
+        </button>
+        <button class="btnex" onclick="loadExample()">Cargar ejemplo</button>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- Panel derecho -->
+  <div class="pright" id="pr">
+    <div class="empty" id="es">
+      <div class="eico">🔬</div>
+      <h2>Sin análisis</h2>
+      <p>Pega un texto o sube un archivo TXT, DOC, DOCX o PDF y pulsa <strong>Analizar</strong>.</p>
+    </div>
+    <div id="res" style="display:none">
+      <!-- Zona fija superior: métricas + distribución retórica (con filtros) -->
+      <div class="pright-top ani">
+        <div id="meta" class="meta"></div>
+        <div id="dcard" class="dcard"></div>
+      </div>
+      <!-- Zona scrolleable: páginas del documento -->
+      <div class="pright-scroll ani">
+        <div class="pages" id="pages"></div>
+      </div>
+      <!-- Zona fija inferior: exportación -->
+      <div class="pright-bottom ani">
+        <div id="expcard" class="expcard"></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /.main -->
+</div><!-- /.shell -->
+
+<!-- Modal de confirmación — limpiar workspace -->
+<div id="clearModal" onclick="if(event.target===this)_cancelClear()"
+  style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.55);
+         align-items:center;justify-content:center">
+  <div style="background:var(--surf);border:1px solid var(--brd);border-radius:14px;
+              padding:1.6rem 2rem;max-width:400px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.3)">
+    <div style="font-size:1.05rem;font-weight:700;color:var(--tx);margin-bottom:.5rem">
+      ⚠️ ¿Borrar el análisis actual?
+    </div>
+    <div style="font-size:.83rem;color:var(--mu);line-height:1.55;margin-bottom:1.2rem"
+         id="clearModalMsg">
+      Esta acción borrará el resultado del análisis actual. No se puede deshacer.
+    </div>
+    <div style="display:flex;gap:.7rem;justify-content:flex-end">
+      <button onclick="_cancelClear()"
+        style="padding:.5rem 1.1rem;border:1px solid var(--brd2);border-radius:8px;
+               background:none;color:var(--mu);cursor:pointer;font-size:.84rem">
+        Cancelar
+      </button>
+      <button onclick="_confirmClear()"
+        style="padding:.5rem 1.1rem;border:none;border-radius:8px;
+               background:#DC2626;color:#fff;cursor:pointer;font-size:.84rem;font-weight:600">
+        Sí, borrar
+      </button>
+    </div>
+  </div>
+</div>
+<!-- ══ AVISO VISTA NO OPTIMIZADA (v7.6) ════════════════════════════════════
+     Overlay soft que se muestra automaticamente en viewports < 900px.
+     El usuario puede cerrarlo con "Continuar de todos modos"; la eleccion
+     persiste en localStorage (clave maia_mn_dismissed_v76). Tras cerrar
+     queda visible un badge discreto en el header (#mobileBadge) como
+     recordatorio. Toda la logica de visibilidad esta en CSS via media
+     query @media(max-width:899px) + body.mn-dismissed.
+══════════════════════════════════════════════════════════════════════════ -->
+<div id="mobileNotice">
+  <div class="mn-card">
+    <div class="mn-icon">⚠️</div>
+    <div class="mn-title">Vista no optimizada para este dispositivo</div>
+    <div class="mn-body">
+      Esta solución está diseñada para visualizarse en navegadores de escritorio
+      (ancho ≥ 900 px). En móvil y tableta algunos elementos pueden verse
+      cortados o desalineados.
+      <br><br>
+      Estamos trabajando en optimizar la interfaz para estos dispositivos en
+      próximas versiones.
+    </div>
+    <button class="mn-btn" onclick="_dismissMobileNotice()">
+      Continuar de todos modos
+    </button>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<!-- Lógica de la aplicación -->
+<script src="/static/js/app.js"></script>
+</body>
+</html>
