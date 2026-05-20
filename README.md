@@ -52,16 +52,17 @@
 
 - **Tarea 1 (T1) — Segmentación retórica:** clasificación de fragmentos textuales en siete categorías funcionales: *Introducción* (INTRO), *Antecedentes* (BACK), *Metodología* (METH), *Resultados* (RES), *Discusión* (DISC), *Limitaciones* (LIM) y *Conclusiones* (CONC).
 
-    | Etiqueta | Color | Sección |
-    |---|---|---|
-    | INTRO | 🔵 Azul | Introducción |
-    | BACK | 🟣 Violeta | Antecedentes |
-    | METH | 🟡 Ámbar | Metodología |
-    | RES | 🟢 Verde | Resultados |
-    | DISC | 🩵 Cian | Discusión |
-    | CONTR | 🔴 Rojo | Contribución |
-    | LIM | 🟠 Naranja | Limitaciones |
-    | CONC | 🔷 Índigo | Conclusiones |
+    | Etiqueta | Color | Hex | Sección |
+    |---|---|---|---|
+    | INTRO | <span style="display:inline-block;width:14px;height:14px;background:#2563EB;border:1px solid #1e40af;border-radius:3px;vertical-align:middle"></span> Azul | `#2563EB` | Introducción |
+    | BACK | <span style="display:inline-block;width:14px;height:14px;background:#7C3AED;border:1px solid #5b21b6;border-radius:3px;vertical-align:middle"></span> Violeta | `#7C3AED` | Antecedentes |
+    | METH | <span style="display:inline-block;width:14px;height:14px;background:#84CC16;border:1px solid #4d7c0f;border-radius:3px;vertical-align:middle"></span> Verde lima | `#84CC16` | Metodología |
+    | RES | <span style="display:inline-block;width:14px;height:14px;background:#16A34A;border:1px solid #14532d;border-radius:3px;vertical-align:middle"></span> Verde | `#16A34A` | Resultados |
+    | DISC | <span style="display:inline-block;width:14px;height:14px;background:#0F766E;border:1px solid #134e4a;border-radius:3px;vertical-align:middle"></span> Teal | `#0F766E` | Discusión |
+    | CONTR | <span style="display:inline-block;width:14px;height:14px;background:#DC2626;border:1px solid #991b1b;border-radius:3px;vertical-align:middle"></span> Rojo | `#DC2626` | Contribución |
+    | LIM | <span style="display:inline-block;width:14px;height:14px;background:#C026D3;border:1px solid #86198f;border-radius:3px;vertical-align:middle"></span> Magenta | `#C026D3` | Limitaciones |
+    | CONC | <span style="display:inline-block;width:14px;height:14px;background:#D97706;border:1px solid #92400e;border-radius:3px;vertical-align:middle"></span> Ámbar | `#D97706` | Conclusiones |
+
 
 - **Tarea 2 (T2) — Detección de contribuciones:** clasificación binaria que identifica si un fragmento contiene un aporte científico original. Se modela como tarea **transversal** e independiente de T1, dado que una contribución puede coexistir con cualquier categoría retórica.
 
@@ -282,16 +283,16 @@ proyecto_grado_maia/
 │   ├── T1_segmentacion_retorica/     ← notebooks de Tarea 1 (Colab / Pro / Pro+)
 │   └── T2_deteccion_contribuciones/  ← notebooks de Tarea 2 (Colab / Pro / Pro+)
 │
-├── Modelos/                          ← Pesos finales del proyecto
-│   └── (los pesos NO se versionan en Git; ver §12 y scripts/download_models.sh)
+├── Modelos/                          ← ★ Pesos finales del proyecto
+│   └── URL a Google Drive (los pesos NO se versionan en Git; ver §12 y scripts/download_models.sh)
 │
-├── Datos/                            ← ★ Gold Test Sets liberados
-│   ├── gold_t1.csv                   ← Gold Test Set T1 completo (1.401 fragmentos)
-│   ├── gold_t2.csv                   ← Gold Test Set T2 completo (170 con consenso)
-│   ├── schema_categorias_retoricas.md
-│   └── schema_contribuciones.md
+├── Datos/                            ← ★ Datasets T1 y T2
+│   ├── dataset t1/                   ← Dataset T1 completo
+│   └── dataset t2/                   ← Dataset T2 completo
 │
 └── docs/                             ← entregables académicos del curso
+    ├── images/                       ← archivos usados en el presente README
+    ├── articulo_prueba_SciELO.txt    ← archivo de ejemplo de uso 
     └── Articulo_PLN_Grupo2_2026.pdf  ← artículo científico final
 
 ```
@@ -1240,13 +1241,13 @@ Datos/
 
 | Etiqueta | Nombre completo | Función discursiva | Marcadores típicos | Color |
 |---|---|---|---|---|
-| `INTRO` | Introducción | Plantea el problema y motiva el trabajo | "este trabajo aborda", "el objetivo de" | `#2563EB` |
-| `BACK` | Antecedentes | Revisa literatura previa relevante | "trabajos previos", "se ha demostrado que" | `#7C3AED` |
-| `METH` | Metodología | Describe el procedimiento experimental | "se utilizó", "el corpus consistió en" | `#84CC16` |
-| `RES` | Resultados | Reporta hallazgos cuantitativos | "se obtuvo", "la métrica alcanzó" | `#16A34A` |
-| `DISC` | Discusión | Interpreta los resultados | "esto sugiere que", "en contraste con" | `#0F766E` |
-| `LIM` | Limitaciones | Reconoce restricciones del trabajo | "sin embargo", "no fue posible" | `#C026D3` |
-| `CONC` | Conclusiones | Sintetiza hallazgos y trabajo futuro | "se concluye que", "en trabajo futuro" | `#1F2937` |
+| `INTRO` | Introducción | Plantea el problema y motiva el trabajo | "este trabajo aborda", "el objetivo de" | <span style="display:inline-block;width:14px;height:14px;background:#2563EB;border:1px solid #1e40af;border-radius:3px;vertical-align:middle"></span> Azul `#2563EB` |
+| `BACK` | Antecedentes | Revisa literatura previa relevante | "trabajos previos", "se ha demostrado que" | <span style="display:inline-block;width:14px;height:14px;background:#7C3AED;border:1px solid #5b21b6;border-radius:3px;vertical-align:middle"></span> Violeta `#7C3AED` |
+| `METH` | Metodología | Describe el procedimiento experimental | "se utilizó", "el corpus consistió en" | <span style="display:inline-block;width:14px;height:14px;background:#84CC16;border:1px solid #4d7c0f;border-radius:3px;vertical-align:middle"></span> Verde lima `#84CC16` |
+| `RES` | Resultados | Reporta hallazgos cuantitativos | "se obtuvo", "la métrica alcanzó" | <span style="display:inline-block;width:14px;height:14px;background:#16A34A;border:1px solid #14532d;border-radius:3px;vertical-align:middle"></span> Verde `#16A34A` |
+| `DISC` | Discusión | Interpreta los resultados | "esto sugiere que", "en contraste con" | <span style="display:inline-block;width:14px;height:14px;background:#0F766E;border:1px solid #134e4a;border-radius:3px;vertical-align:middle"></span> Teal `#0F766E` |
+| `LIM` | Limitaciones | Reconoce restricciones del trabajo | "sin embargo", "no fue posible" | <span style="display:inline-block;width:14px;height:14px;background:#C026D3;border:1px solid #86198f;border-radius:3px;vertical-align:middle"></span> Magenta `#C026D3` |
+| `CONC` | Conclusiones | Sintetiza hallazgos y trabajo futuro | "se concluye que", "en trabajo futuro" | <span style="display:inline-block;width:14px;height:14px;background:#D97706;border:1px solid #92400e;border-radius:3px;vertical-align:middle"></span> Ámbar `#D97706` |
 
 > Los colores hex son los mismos que devuelve `/api/lexicon` y los que se aplican en la visualización del frontend.
 
