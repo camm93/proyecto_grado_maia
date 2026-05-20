@@ -2,12 +2,16 @@
 
 **Un Enfoque Comparativo entre Encoders Especializados y Grandes Modelos de Lenguaje**
 
-> Proyecto de Grado · Maestría en Inteligencia Artificial · Universidad de los Andes · 2026
-> Grupo de Investigación FLAG — TICsW · Departamento de Ingeniería de Sistemas y Computación
+> Proyecto de Grado · Maestría en Inteligencia Artificial ·
+> Departamento de Ingeniería de Sistemas y Computación ·  
+> Universidad de los Andes · 2026
+
+- Github: https://github.com/camm93/proyecto_grado_maia
+- www: https://uniandes-maia-g2.duckdns.org 
 
 ---
 
-## Tabla de contenidos
+## Tabla de contenido
 
 1. [Equipo](#1-equipo)
 2. [Resumen del proyecto](#2-resumen-del-proyecto)
@@ -1196,8 +1200,8 @@ Notebooks/
 ### 13.2. Convenciones
 
 - **Nombres en `snake_case`**, descriptivos del paso del pipeline ML (EDA → Silver Labels → Train → Eval → Análisis de errores).
-- **Cada notebook arranca con una celda Markdown** que indica: autor, fecha, propósito, datos de entrada y datos de salida.
-- **Resultados reproducibles**: fijar `random_state=42` / `seed=42` en todas las particiones y modelos.
+
+- **Resultados reproducibles**: fijar `random_state=42` / `seed=42` en todas las particiones y modelos, no obstante, el uso diferentes tipos de CPU/GPU puede incidir.
 - **Sin secretos**: las claves API se cargan desde `.env` con `python-dotenv` o desde *Colab Secrets*, nunca hardcoded.
 
 ### 13.3. Entorno de ejecución
@@ -1221,20 +1225,18 @@ jupyter notebook
 
 ## 14. Datos
 
-La carpeta `Datos/` contiene los **Gold Test Sets** completos liberados por el equipo bajo licencia [Creative Commons BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es). El corpus crudo (~1.8M documentos del proyecto CORE) **no se versiona** por su tamaño y por restricciones del proveedor.
+La carpeta `Datos/` contiene los **Datasets** completos liberados por el equipo bajo licencia [Creative Commons BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es). El corpus crudo (~1.8M documentos del proyecto CORE) **no se versiona** por su tamaño y por restricciones del proveedor.
 
 > **Política de liberación:**
-> - ✅ **Gold Test Sets** (anotación humana doble) → publicados completos.
-> - ❌ **Silver Labels** (etiquetas automáticas internas) → no publicadas. Material de uso interno del proyecto.
+> - **Test Sets** (anotación humana doble) 
+
 
 ### 14.1. Contenido publicado
 
 ```text
-Datos/
-├── gold_t1.csv                          ← Gold Test Set T1 (1.401 fragmentos, κ = 0.6714)
-├── gold_t2.csv                          ← Gold Test Set T2 (170 fragmentos con consenso, κ = 0.6995)
-├── schema_categorias_retoricas.md       ← definición operacional de las 7 clases T1
-└── schema_contribuciones.md             ← criterios de anotación T2
+Datos/                        ← ★ Datasets T1 y T2
+  ├── dataset t1/             ← Dataset T1 completo
+  └── dataset t2/             ← Dataset T2 completo
 ```
 
 ### 14.2. Esquema de las categorías retóricas (T1)
@@ -1280,14 +1282,14 @@ Los Gold Test Sets usan separador `,` con encabezado y comillas dobles para text
 | Corpus crudo CORE | 1.812.557 documentos `.txt` | Provisto por el grupo FLAG; no redistribuible |
 | Silver Labels T1 | 27.115 fragmentos | Generados por reglas heurísticas; uso interno |
 | Silver Labels T2 | 1.600 entrenamiento + 400 validación | Patrones lingüísticos enriquecidos con T1; uso interno |
-| **Gold Test Set T1** | **1.401 fragmentos** | **Liberado** — κ = 0.6714 |
-| **Gold Test Set T2** | **170 fragmentos con consenso** (de 200 anotados) | **Liberado** — κ = 0.6995 |
+| **Test Set T1** | **1.401 fragmentos** | **Liberado** — κ = 0.6714 |
+| **Test Set T2** | **200 fragmentos** | **Liberado** — κ = 0.6995 |
 
 Para acceso al corpus completo, contactar al grupo FLAG de la Universidad de los Andes.
 
 ---
 
-## 15. Smoke test
+## 15. Smoke test - Pruebas unitarias
 
 El smoke test valida que **todos los endpoints respondan correctamente** después de un despliegue. Se ejecuta desde la raíz de `app/`:
 
