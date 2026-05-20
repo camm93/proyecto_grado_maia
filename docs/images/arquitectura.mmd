@@ -1,0 +1,86 @@
+---
+config:
+  theme: default
+  look: neo
+  layout: elk
+---
+flowchart TB
+  %% Secciones principales organizadas de arriba hacia abajo
+  subgraph Cliente["Cliente"]
+    direction TB
+    Client["Cliente (navegador web)<br>Extracción PDF/DOCX client-side"]
+  end
+
+  subgraph Seguridad["Seguridad / Control de tasa"]
+    direction TB
+    Firewall["AWS Security Groups<br>(22, 80, 443)"]
+    RateLimit["Rate limiter<br>1.000 req/h por IP"]
+  end
+
+  subgraph AWS["AWS EC2 g4dn.xlarge"]
+    direction TB
+
+
+
+    subgraph FE["Frontend"]
+      direction TB
+      Static["HTML5 + CSS + JS vanilla<br>pdf.js + mammoth.js<br>index.html · css/ · js/ · assets/"]
+    end
+
+    subgraph BE["Backend"]
+      direction TB
+      uvicorn["uvicorn (ASGI) · 127.0.0.1:8000"]
+      FastAPI["FastAPI · backend/main.py"]
+    end
+
+    subgraph NginxProxy["Proxy inverso"]
+      Nginx["nginx<br>TLS (Let's Encrypt)<br>:443 → :8000"]
+    end
+  end
+
+  subgraph Endpoints["Endpoints REST (FastAPI)"]
+    direction TB
+    Health["/health"]
+    Segment["/api/segment (T1)"]
+    Contrib["/api/contributions (T2)"]
+    Extract["/api/extract-doc"]
+    Inspect["/api/models<br>/api/few_shots<br>/api/lexicon"]
+  end
+
+  subgraph Models["Capa de modelos (lazy loading)"]
+    direction TB
+    SciBETO["SciBETO-large (fine-tuned)"]
+    LLM1["Llama 3.1 8B (4-bit NF4)"]
+    LLM2["GPT-4o-mini (API)"]
+  end
+
+  %% Relaciones
+  Client -- HTTPS --> Seguridad
+  Seguridad --> NginxProxy
+  NginxProxy --> BE & FE
+  BE --> Endpoints & Models
+
+  GD["Google Drive<br>(pesos SciBETO + SHA256)"] -. descarga .-> SciBETO
+  HF["Hugging Face<br>(Llama 3.1 + HF_TOKEN)"] -. descarga .-> LLM1
+  OAI["OpenAI API<br>(GPT-4o-mini + API key)"] -. API .-> LLM2
+
+%% Colores por categoría
+  classDef client stroke:#38bdf8,fill:#f0f9ff
+  classDef seguridad stroke:#f87171,fill:#fef2f2
+  classDef infra stroke:#4ade80,fill:#f0fdf4
+  classDef frontend stroke:#facc15,fill:#fefce8
+  classDef backend stroke:#818cf8,fill:#eef2ff
+  classDef proxy stroke:#fb923c,fill:#fff7ed
+  classDef endpoints stroke:#a78bfa,fill:#f5f3ff
+  classDef models stroke:#2dd4bf,fill:#f0fdfa
+  classDef externo stroke:#e879f9,fill:#fdf4ff
+
+  class Cliente,Client client
+  class Seguridad,Firewall,RateLimit seguridad
+  class Infra,OS,GPU,Systemd,Logs infra
+  class FE,Static frontend
+  class BE,uvicorn,FastAPI backend
+  class NginxProxy,Nginx proxy
+  class Endpoints,Health,Segment,Contrib,Extract,Inspect endpoints
+  class Models,SciBETO,LLM1,LLM2 models
+  class GD,HF,OAI externo
