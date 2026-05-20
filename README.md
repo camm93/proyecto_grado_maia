@@ -2,13 +2,13 @@
 
 **Un Enfoque Comparativo entre Encoders Especializados y Grandes Modelos de Lenguaje**
 
-> Proyecto de Grado · Maestría en Inteligencia Artificial ·
-> Departamento de Ingeniería de Sistemas y Computación ·  
+> Proyecto de Grado · Maestría en Inteligencia Artificia <br>
+> Departamento de Ingeniería de Sistemas y Computación <br>
 > Universidad de los Andes · 2026
 
 - Github: https://github.com/camm93/proyecto_grado_maia
 - www: https://uniandes-maia-g2.duckdns.org 
-
+<br><br>
 ---
 
 ## Tabla de contenido
@@ -27,7 +27,7 @@
 12. [Modelos](#12-modelos)
 13. [Notebooks](#13-notebooks)
 14. [Datos](#14-datos)
-15. [Smoke test](#15-smoke-test)
+15. [Smoke test - Pruebas unitarias](#15-smoke-test)
 16. [Solución de problemas](#16-solución-de-problemas)
 17. [Créditos y agradecimientos](#17-créditos-y-agradecimientos)
 18. [Licencia](#18-licencia)
@@ -92,7 +92,7 @@ La aplicación está desplegada y accesible públicamente en: https://uniandes-m
 <p align="center">
   <img src="docs/images/app_retorica.png"
        alt="Aplicación en ejecución..."
-       width="800">
+       width="600">
 </p>
 <p align="center">
   <em>Figura 1. Aplicación en producción, resultado de segmentación retórica (Tarea 1).</em>
@@ -107,7 +107,7 @@ La aplicación está desplegada y accesible públicamente en: https://uniandes-m
 <p align="center">
   <img src="docs/images/app_contr.png"
        alt="Aplicación en ejecución..."
-       width="800">
+       width="600">
 </p>
 <p align="center">
   <em>Figura 2. Aplicación en producción, resultado de detección de contribuciones (Tarea 2).</em>
@@ -162,7 +162,7 @@ Los ejemplos completos de uso de cada endpoint están en la sección [11. Ejempl
 <p align="center">
   <img src="docs/images/arquitectura.png"
        alt="Diagrama de arquitectura del sistema MAIA..."
-       width="800">
+       width="600">
 </p>
 <p align="center">
   <em>Figura 3. Arquitectura general de la aplicación.</em>
@@ -250,7 +250,7 @@ proyecto_grado_maia/
 │   ├── frontend/                     ← UI estática (HTML + CSS + JS vanilla)
 │   │   ├── index.html
 │   │   ├── css/styles.css
-│   │   ├── js/app.js                 ← incluye pdf.js + mammoth.js para extracción client-side
+│   │   ├── js/app.js                 
 │   │   └── assets/                   ← logo, favicon
 │   │
 │   ├── scripts/                      ← automatización de deploy y operación
@@ -1481,6 +1481,6 @@ El artículo en `docs/Articulo_PLN_Grupo2_2026.pdf` es propiedad académica del 
 ---
 
 <p align="center">
-  <em>Última actualización del README:</em> Mayo 2026 · Versión de aplicación: 7.8.1<br/>
+  <em>Última actualización del README:</em> 20 de mayo de 2026<br/>
   <strong>Grupo 2 · MAIA 2026 · Universidad de los Andes</strong>
 </p>
