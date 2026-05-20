@@ -70,7 +70,7 @@ log = logging.getLogger("maia.model_sync")
 # -- Defaults / env -----------------------------------------------------------
 DEFAULT_MANIFEST_PATH = "/app/release_manifest.json"
 DEFAULT_MODELS_DIR = "/app/models"
-DEFAULT_MIN_FREE_DISK_GB = 10
+DEFAULT_MIN_FREE_DISK_GB = 8
 DEFAULT_MAX_RETRIES = 3
 DEFAULT_BACKOFF_BASE_S = 5
 

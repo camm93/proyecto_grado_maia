@@ -198,7 +198,7 @@ bash scripts/smoke_test.sh http://localhost:8000
 ```
 [1/8] Backend reachable y /health responde 200
   ✓ PASS — GET /health → 200
-  ✓ PASS — status='ok' · version=2.1.0
+  ✓ PASS — status='ok' · version=7.8.2
 [2/8] Catálogo T2 lista los 7 modelos esperados
   ✓ PASS — 7/7 IDs T2 presentes
 [3/8] Catálogo T1 incluye scibeto-es-t1 (no 'scibert-es' legacy)

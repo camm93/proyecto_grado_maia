@@ -25,7 +25,7 @@ Dos perfiles posibles según los modelos que se quieran probar:
 | Perfil | Disco libre | RAM | GPU |
 |---|---|---|---|
 | **Completo (con Llama 3.1 8B local)** | **30 GB** | 16 GB (32 GB si Llama corre en CPU) | Opcional — T4 16 GB recomendado |
-| **Reducido (solo SciBETO + GPT API)** | **8 GB** | 8 GB | No requerida |
+| **Reducido (solo SciBETO + GPT API)** | **10 GB** | 8 GB | No requerida |
 
 > **Nota práctica:** en la instancia de referencia del equipo (AWS EC2 g4dn.xlarge), `/data/app` ocupa **~29 GB** cuando todo está descargado y operativo (código + venv + 3 modelos SciBETO + cache de Llama 3.1 8B). Eso justifica los 30 GB del perfil completo.
 
@@ -152,7 +152,7 @@ Respuesta esperada (resumen):
 ```json
 {
   "status": "ok",
-  "version": "2.1.0",
+  "version": "7.8.2",
   "models_t1": ["heuristic", "scibeto-es-t1", "gpt-4o-mini-t1-zs", ...],
   "models_t2": ["heuristic", "scibeto-es-t2", ...]
 }

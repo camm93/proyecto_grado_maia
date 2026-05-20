@@ -293,7 +293,7 @@ app = FastAPI(
         "Flujo obligatorio: primero `/api/segment`, luego `/api/contributions` "
         "con los segmentos devueltos por T1."
     ),
-    version="2.1.0",
+    version="7.8.2",
     lifespan=lifespan,
 )
 

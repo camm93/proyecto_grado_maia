@@ -62,7 +62,7 @@ done
 cd "$(dirname "$0")"
 
 echo "============================================================"
-echo "  MAIA -- Analisis Retorico (v5)"
+echo "  MAIA -- Analisis Retorico (v7.8.2)"
 echo "  $(date '+%Y-%m-%d %H:%M:%S')"
 echo "============================================================"
 

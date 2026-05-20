@@ -18,7 +18,7 @@ def health():
     refresh_catalog()
     return {
         "status": "ok",
-        "version": "2.1.0",
+        "version": "7.8.2",
         "endpoints": ["/api/segment", "/api/contributions", "/api/lexicon",
                       "/api/models", "/api/models/{model_id}/info",
                       "/api/few_shots"],

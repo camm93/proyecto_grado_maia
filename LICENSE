@@ -1,0 +1,53 @@
+MIT License
+
+Copyright (c) 2026 Grupo 2 — MAIA 2026, Universidad de los Andes
+  Santiago Ballesteros Pastrán
+  Edwin Alexander Cifuentes Bastidas
+  Natalia Moncada Suárez
+  Cristian Alexis Murillo Martínez
+  Juan Pablo Pérez Atehortua
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+----------------------------------------------------------------------
+
+ADDITIONAL NOTICES
+
+This MIT License covers the source code of the MAIA application under the
+`app/` directory (backend, frontend, scripts, tests). It does NOT cover:
+
+  * Model weights. The fine-tuned SciBETO weights distributed via Google Drive
+    inherit the license of the base model Flaglab/SciBETO-large
+    (https://huggingface.co/Flaglab/SciBETO-large). The Llama 3.1 8B Instruct
+    weights, when downloaded by the application, are subject to the Llama 3.1
+    Community License Agreement
+    (https://www.llama.com/llama3_1/license/).
+
+  * Datasets. The Gold Test Sets released under `Datos/` are licensed under
+    Creative Commons Attribution 4.0 International (CC BY 4.0):
+    https://creativecommons.org/licenses/by/4.0/
+    Attribution must reference both the Group 2 MAIA 2026 team and the
+    associated scientific article (see README §17).
+
+  * Scientific article. The PDF in `docs/Articulo_PLN_Grupo2_2026.pdf` remains
+    the academic property of Group 2 and Universidad de los Andes. Cite as
+    indicated in README §17.
+
+  * Third-party APIs. Usage of the OpenAI API (GPT-4o-mini) is governed by
+    OpenAI's terms of service: https://openai.com/policies/terms-of-use

@@ -1,8 +1,8 @@
 [Unit]
 Description=MAIA - Analisis Retorico backend (FastAPI + uvicorn)
 Documentation=https://github.com/camm93/proyecto_grado_maia
-After=network-online.target
-Wants=network-online.target
+#After=network-online.target
+#Wants=network-online.target
 # Si crashea, no reintentar mas de 5 veces en 5 min (evita boot loops)
 StartLimitIntervalSec=300
 StartLimitBurst=5
