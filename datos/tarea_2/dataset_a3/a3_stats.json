@@ -1,0 +1,57 @@
+{
+  "config": {
+    "n_pos": 1000,
+    "n_neg": 1000,
+    "neut_fraction": 0.4,
+    "inj_fraction": 0.3,
+    "seed": 42,
+    "split": {
+      "train": 0.8,
+      "val": 0.2
+    },
+    "test_source": "validacion_humana_binaria"
+  },
+  "dataset_a1": {
+    "ES_CONTRIBUCION": 1000,
+    "NO_ES_CONTRIBUCION": 1000,
+    "total": 2000
+  },
+  "decoupling": {
+    "positivos_neutralizados": 400,
+    "negativos_inyectados": 300
+  },
+  "antes": {
+    "counts": {
+      "train": 1600,
+      "val": 400
+    },
+    "labels": {
+      "train": {
+        "ES_CONTRIBUCION": 794,
+        "NO_ES_CONTRIBUCION": 806
+      },
+      "val": {
+        "ES_CONTRIBUCION": 206,
+        "NO_ES_CONTRIBUCION": 194
+      }
+    }
+  },
+  "despues": {
+    "counts": {
+      "train": 1600,
+      "val": 400
+    },
+    "labels": {
+      "train": {
+        "ES_CONTRIBUCION": 794,
+        "NO_ES_CONTRIBUCION": 806
+      },
+      "val": {
+        "ES_CONTRIBUCION": 206,
+        "NO_ES_CONTRIBUCION": 194
+      }
+    }
+  },
+  "isolation_ok": true,
+  "elapsed_s": 0.25
+}
