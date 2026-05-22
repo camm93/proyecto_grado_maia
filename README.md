@@ -6,8 +6,8 @@
 > Departamento de Ingeniería de Sistemas y Computación <br>
 > Universidad de los Andes · 2026
 
-- Github: https://github.com/camm93/proyecto_grado_maia
-- www: https://uniandes-maia-g2.duckdns.org 
+- Repositorio Github: https://github.com/camm93/proyecto_grado_maia
+- Aplicación disponible en: https://uniandes-maia-g2.duckdns.org 
 <br><br>
 ---
 
@@ -58,14 +58,14 @@
 
     | Etiqueta | Color | Hex | Sección |
     |---|---|---|---|
-    | INTRO | <span style="display:inline-block;width:14px;height:14px;background:#2563EB;border:1px solid #1e40af;border-radius:3px;vertical-align:middle"></span> Azul | `#2563EB` | Introducción |
-    | BACK | <span style="display:inline-block;width:14px;height:14px;background:#7C3AED;border:1px solid #5b21b6;border-radius:3px;vertical-align:middle"></span> Violeta | `#7C3AED` | Antecedentes |
-    | METH | <span style="display:inline-block;width:14px;height:14px;background:#84CC16;border:1px solid #4d7c0f;border-radius:3px;vertical-align:middle"></span> Verde lima | `#84CC16` | Metodología |
-    | RES | <span style="display:inline-block;width:14px;height:14px;background:#16A34A;border:1px solid #14532d;border-radius:3px;vertical-align:middle"></span> Verde | `#16A34A` | Resultados |
-    | DISC | <span style="display:inline-block;width:14px;height:14px;background:#0F766E;border:1px solid #134e4a;border-radius:3px;vertical-align:middle"></span> Teal | `#0F766E` | Discusión |
-    | CONTR | <span style="display:inline-block;width:14px;height:14px;background:#DC2626;border:1px solid #991b1b;border-radius:3px;vertical-align:middle"></span> Rojo | `#DC2626` | Contribución |
-    | LIM | <span style="display:inline-block;width:14px;height:14px;background:#C026D3;border:1px solid #86198f;border-radius:3px;vertical-align:middle"></span> Magenta | `#C026D3` | Limitaciones |
-    | CONC | <span style="display:inline-block;width:14px;height:14px;background:#D97706;border:1px solid #92400e;border-radius:3px;vertical-align:middle"></span> Ámbar | `#D97706` | Conclusiones |
+    | INTRO | ![#2563EB](https://placehold.co/15x15/2563EB/2563EB.png) Azul | `#2563EB` | Introducción |
+    | BACK | ![#7C3AED](https://placehold.co/15x15/7C3AED/7C3AED.png) Violeta | `#7C3AED` | Antecedentes |
+    | METH | ![#84CC16](https://placehold.co/15x15/84CC16/84CC16.png) Verde lima | `#84CC16` | Metodología |
+    | RES | ![#16A34A](https://placehold.co/15x15/16A34A/16A34A.png) Verde | `#16A34A` | Resultados |
+    | DISC | ![#0F766E](https://placehold.co/15x15/0F766E/0F766E.png) Teal | `#0F766E` | Discusión |
+    | CONTR | ![#DC2626](https://placehold.co/15x15/DC2626/DC2626.png) Rojo | `#DC2626` | Contribución |
+    | LIM | ![#C026D3](https://placehold.co/15x15/C026D3/C026D3.png) Magenta | `#C026D3` | Limitaciones |
+    | CONC | ![#D97706](https://placehold.co/15x15/D97706/D97706.png) Ámbar | `#D97706` | Conclusiones |
 
 
 - **Tarea 2 (T2) — Detección de contribuciones:** clasificación binaria que identifica si un fragmento contiene un aporte científico original. Se modela como tarea **transversal** e independiente de T1, dado que una contribución puede coexistir con cualquier categoría retórica.
@@ -87,6 +87,8 @@ El sistema integra tres familias de modelos —un heurístico léxico-posicional
 
 ## 3. Aplicación en producción
 
+**¿Qué es esto?** Una aplicación web que analiza artículos científicos en español y los etiqueta automáticamente por sección retórica (introducción, metodología, resultados, etc.) y detecta las contribuciones científicas del autor.
+
 La aplicación está desplegada y accesible públicamente en: https://uniandes-maia-g2.duckdns.org 
 
 <p align="center">
@@ -99,10 +101,7 @@ La aplicación está desplegada y accesible públicamente en: https://uniandes-m
 </p>
 
 
-**Infraestructura:** AWS EC2 `g4dn.xlarge` (GPU NVIDIA T4 16 GB) · Amazon Linux 2023 · Python 3.11
-**Versión de la aplicación:** 7.8.1
-**Certificado HTTPS:** Let's Encrypt con renovación automática (`certbot-renew.timer`)
-**Servicio:** `systemd` (`maia.service`) habilitado al arranque de forma persistente, *reverse proxy* `nginx`
+<br>
 
 <p align="center">
   <img src="docs/images/app_contr.png"
@@ -112,6 +111,9 @@ La aplicación está desplegada y accesible públicamente en: https://uniandes-m
 <p align="center">
   <em>Figura 2. Aplicación en producción, resultado de detección de contribuciones (Tarea 2).</em>
 </p>
+<br>
+
+---
 
 | Recurso | URL |
 |---|---|
@@ -121,7 +123,54 @@ La aplicación está desplegada y accesible públicamente en: https://uniandes-m
 | **Health check** | https://uniandes-maia-g2.duckdns.org/health |
 | **Catálogo de modelos disponibles** | https://uniandes-maia-g2.duckdns.org/api/models |
 
-### Endpoints disponibles
+
+### Aplicación intuitiva y de fácil uso en 3 pasos
+
+1. **Abrir** la aplicación en https://uniandes-maia-g2.duckdns.org
+2. **Cargar** un Texto plano o archivos PDF, DOC o DOCX que contengan texto científico en español. Si no tenés uno a mano, descargar el artículo de prueba de SciELO incluido en el repositorio: [`docs/articulo_prueba_SciELO.txt`](docs/articulo_prueba_SciELO.txt) (CC BY 4.0).
+3. **Elegir** los modelos en los selectores (recomendado: `SciBETO-large` para T1 y T2) y hacer clic en **Analizar**.
+
+Los párrafos aparecerán coloreados según su categoría retórica (ver tabla de colores en §2), y las contribuciones detectadas se resaltarán dentro del texto. Los resultados se pueden exportar como JSON, CSV o HTML.
+
+### Probar la API en 30 segundos (con curl)
+
+```bash
+# Health check (¿el servicio está vivo?)
+curl -s https://uniandes-maia-g2.duckdns.org/health | jq .status
+# → "ok"
+
+# Catálogo de modelos disponibles
+curl -s https://uniandes-maia-g2.duckdns.org/api/models | jq '.T1[].id'
+
+# Segmentación retórica de un fragmento
+curl -s -X POST https://uniandes-maia-g2.duckdns.org/api/segment \
+  -H "Content-Type: application/json" \
+  -d '{"text": "Este trabajo propone un nuevo método de clasificación.", "model_id": "scibeto-es-t1"}' \
+  | jq '.segments[0].t1_label'
+# → "INTRO"
+```
+
+### Para usuarios técnicos que quieren reproducir el entorno
+
+Instalación local en `localhost:8000` (Linux/macOS):
+
+```bash
+git clone https://github.com/camm93/proyecto_grado_maia.git
+cd proyecto_grado_maia/app
+sudo chmod +x ./start.sh
+./start.sh
+```
+
+Esto crea el entorno virtual, instala dependencias, descarga los pesos (~3.8 GB) y arranca el servidor en un solo comando. Para detalle paso a paso, configuración de credenciales OpenAI/HuggingFace, y despliegue en AWS, ver §7 (instalación local) y §8 (despliegue AWS).
+
+### Documentación interactiva
+
+- **Swagger UI:** https://uniandes-maia-g2.duckdns.org/docs (probar la API desde el navegador, sin escribir código)
+- **OpenAPI schema:** https://uniandes-maia-g2.duckdns.org/openapi.json (contrato completo en JSON)
+
+---
+
+### 3.2. Endpoints disponibles
 
 | Método | Ruta | Descripción |
 |---|---|---|
@@ -140,7 +189,7 @@ Los ejemplos completos de uso de cada endpoint están en la sección [11. Ejempl
 
 ---
 
-### Archivos soportados
+### 3.3. Archivos soportados
 
 | Formato | Detección de columnas | Detección de tamaño de hoja |
 |---|---|---|
@@ -148,14 +197,39 @@ Los ejemplos completos de uso de cada endpoint están en la sección [11. Ejempl
 | DOCX / DOC | No necesario (Mammoth) | Sí (desde XML interno) |
 | TXT | — | Siempre Carta |
 
-### Exportación de resultados
+### 3.4. Exportación de resultados
 
 - **JSON** — todos los campos (etiqueta, confianza, texto)
 - **CSV** — tabla plana para Excel / pandas
 - **HTML** — informe visual standalone con colores y highlights
 
+### 3.5. Documentación in-app
+
+La aplicación incluye una **guía de uso integrada** accesible desde el botón en la esquina superior derecha de la interfaz. La guía contiene:
+
+- **Leyenda de categorías retóricas (T1):** los 8 colores asignados a INTRO, BACK, METH, RES, DISC, CONTR, LIM y CONC con su nombre completo
+- **Detección de contribuciones (T2):** explicación de cómo se resaltan los aportes científicos dentro de cada párrafo
+- **Flujo de análisis:** diagrama del paso T1 → T2 con los endpoints `POST /api/segment` y `POST /api/contributions`
+- **Archivos soportados:** formatos de entrada aceptados
+
+Esto asegura que la aplicación sea **autoexplicativa** y pueda ser operada por usuarios sin consulta previa de este README.
+
+<p align="center">
+  <img src="docs/images/guia_uso.png"
+       alt="Captura de pantalla del modal Guía de uso integrado en la aplicación, mostrando la leyenda de las 8 categorías retóricas, la explicación de detección de contribuciones, el flujo T1→T2 y los formatos de archivo soportados"
+       width="600">
+</p>
+<p align="center">
+  <em>Figura 3. Guía de uso integrada en la aplicación, accesible desde el botón superior derecho.</em>
+</p>
+
 
 ## 4. Arquitectura de la aplicación
+
+**Infraestructura:** AWS EC2 `g4dn.xlarge` (GPU NVIDIA T4 16 GB) · Amazon Linux 2023 · Python 3.11
+**Versión de la aplicación:** 7.8.1
+**Certificado HTTPS:** Let's Encrypt con renovación automática (`certbot-renew.timer`)
+**Servicio:** `systemd` (`maia.service`) habilitado al arranque de forma persistente, *reverse proxy* `nginx`
 
 ### Vista general
 
@@ -165,14 +239,14 @@ Los ejemplos completos de uso de cada endpoint están en la sección [11. Ejempl
        width="600">
 </p>
 <p align="center">
-  <em>Figura 3. Arquitectura general de la aplicación.</em>
+  <em>Figura 4. Arquitectura general de la aplicación.</em>
 </p>
 
 <details>
 <summary>Ver código fuente del diagrama (Mermaid)</summary>
 
 El código fuente está versionado en <a href="docs/images/arquitectura.mmd"><code>docs/images/arquitectura.mmd</code></a>.
-Para regenerar el PNG tras editarlo:
+
 
 ```bash
 mmdc -i docs/images/arquitectura.mmd -o docs/images/arquitectura.png -t default -b transparent --width 1600
@@ -311,7 +385,7 @@ proyecto_grado_maia/
 
 ---
 
-## 6. Requisitos del entorno
+## 6. Requisitos del entorno para despliegue 
 
 ### Software
 
@@ -1243,13 +1317,13 @@ Datos/                        ← ★ Datasets T1 y T2
 
 | Etiqueta | Nombre completo | Función discursiva | Marcadores típicos | Color |
 |---|---|---|---|---|
-| `INTRO` | Introducción | Plantea el problema y motiva el trabajo | "este trabajo aborda", "el objetivo de" | <span style="display:inline-block;width:14px;height:14px;background:#2563EB;border:1px solid #1e40af;border-radius:3px;vertical-align:middle"></span> Azul `#2563EB` |
-| `BACK` | Antecedentes | Revisa literatura previa relevante | "trabajos previos", "se ha demostrado que" | <span style="display:inline-block;width:14px;height:14px;background:#7C3AED;border:1px solid #5b21b6;border-radius:3px;vertical-align:middle"></span> Violeta `#7C3AED` |
-| `METH` | Metodología | Describe el procedimiento experimental | "se utilizó", "el corpus consistió en" | <span style="display:inline-block;width:14px;height:14px;background:#84CC16;border:1px solid #4d7c0f;border-radius:3px;vertical-align:middle"></span> Verde lima `#84CC16` |
-| `RES` | Resultados | Reporta hallazgos cuantitativos | "se obtuvo", "la métrica alcanzó" | <span style="display:inline-block;width:14px;height:14px;background:#16A34A;border:1px solid #14532d;border-radius:3px;vertical-align:middle"></span> Verde `#16A34A` |
-| `DISC` | Discusión | Interpreta los resultados | "esto sugiere que", "en contraste con" | <span style="display:inline-block;width:14px;height:14px;background:#0F766E;border:1px solid #134e4a;border-radius:3px;vertical-align:middle"></span> Teal `#0F766E` |
-| `LIM` | Limitaciones | Reconoce restricciones del trabajo | "sin embargo", "no fue posible" | <span style="display:inline-block;width:14px;height:14px;background:#C026D3;border:1px solid #86198f;border-radius:3px;vertical-align:middle"></span> Magenta `#C026D3` |
-| `CONC` | Conclusiones | Sintetiza hallazgos y trabajo futuro | "se concluye que", "en trabajo futuro" | <span style="display:inline-block;width:14px;height:14px;background:#D97706;border:1px solid #92400e;border-radius:3px;vertical-align:middle"></span> Ámbar `#D97706` |
+| `INTRO` | Introducción | Plantea el problema y motiva el trabajo | "este trabajo aborda", "el objetivo de" | ![#2563EB](https://placehold.co/15x15/2563EB/2563EB.png) Azul `#2563EB` |
+| `BACK` | Antecedentes | Revisa literatura previa relevante | "trabajos previos", "se ha demostrado que" | ![#7C3AED](https://placehold.co/15x15/7C3AED/7C3AED.png) Violeta `#7C3AED` |
+| `METH` | Metodología | Describe el procedimiento experimental | "se utilizó", "el corpus consistió en" | ![#84CC16](https://placehold.co/15x15/84CC16/84CC16.png) Verde lima `#84CC16` |
+| `RES` | Resultados | Reporta hallazgos cuantitativos | "se obtuvo", "la métrica alcanzó" | ![#16A34A](https://placehold.co/15x15/16A34A/16A34A.png) Verde `#16A34A` |
+| `DISC` | Discusión | Interpreta los resultados | "esto sugiere que", "en contraste con" | ![#0F766E](https://placehold.co/15x15/0F766E/0F766E.png) Teal `#0F766E` |
+| `LIM` | Limitaciones | Reconoce restricciones del trabajo | "sin embargo", "no fue posible" | ![#C026D3](https://placehold.co/15x15/C026D3/C026D3.png) Magenta `#C026D3` |
+| `CONC` | Conclusiones | Sintetiza hallazgos y trabajo futuro | "se concluye que", "en trabajo futuro" | ![#D97706](https://placehold.co/15x15/D97706/D97706.png) Ámbar `#D97706` |
 
 > Los colores hex son los mismos que devuelve `/api/lexicon` y los que se aplican en la visualización del frontend.
 
