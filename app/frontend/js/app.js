@@ -653,6 +653,80 @@ function t2classify(text){
   if(n===1)return{c:true, conf:0.65};
   return{c:false,conf:Math.max(0.48,0.84-text.split(/\s+/).length*0.0009)};
 }
+/* ══════════════════════════════════════════════════════════════════════════
+   FILTRO DE RUIDO ESTRUCTURAL — descarta encabezados, frontmatter,
+   bibliografía y fragmentos cortos antes de enviar al backend. Los párrafos
+   descartados se preservan en el render con atenuación visual (integridad
+   documental: el usuario ve el documento completo, solo que el ruido no se
+   clasifica retóricamente).
+   ══════════════════════════════════════════════════════════════════════════ */
+const NOISE_FILTER = {
+  enabled: true,        // filtro siempre activo (no expuesto en UI)
+  minWords: 15,         // umbral mínimo de palabras por párrafo
+  // Encabezado de sección bibliográfica (estricto: línea aislada)
+  reBiblioHeading: /^\s*(BIBLIOGRAF[ÍI]A|REFERENCIAS?|REFERENCES?|BIBLIOGRAPHY)\s*:?\s*$/i,
+  // Referencia numerada con año de 4 dígitos (1900-2099) — evita falsos
+  // positivos con listas numeradas legítimas del cuerpo del artículo
+  reNumberedRef:   /^\s*\d{1,3}\.\s+[A-ZÁÉÍÓÚÑ].*?\b(19|20)\d{2}\b/,
+  // Marcadores de frontmatter al inicio de un párrafo
+  reFrontmatter:   /^\s*(Autores?|Afiliaciones?|Autor\s+para\s+correspondencia|Recibido|Aceptado|Publicado(\s+en)?|DOI|URL|Licencia|ISSN|Palabras\s+clave|Keywords)\b/i,
+};
+
+/**
+ * Clasifica un párrafo como ruido estructural o contenido analizable.
+ * Devuelve null si el texto debe procesarse, o un identificador del tipo
+ * de ruido: 'biblio' | 'header' | 'frontmatter' | 'short'.
+ *
+ * El parámetro `state` es un objeto mutable compartido entre llamadas
+ * consecutivas para mantener contexto secuencial: al detectar el inicio
+ * de la sección bibliográfica, todos los párrafos siguientes se marcan
+ * automáticamente como 'biblio'.
+ *
+ * @param {string} text  - texto del párrafo
+ * @param {{inBiblio:boolean}} state - estado mutable secuencial
+ * @returns {string|null}
+ */
+function classifyNoise(text, state){
+  const t = (text || '').trim();
+  if(!t) return 'short';
+
+  // 1) Una vez dentro de la sección bibliográfica, todo lo subsecuente es biblio
+  if(state.inBiblio) return 'biblio';
+
+  // 2) Encabezado de bibliografía → marca el corte y se descarta como header
+  if(NOISE_FILTER.reBiblioHeading.test(t)){
+    state.inBiblio = true;
+    return 'header';
+  }
+
+  // 3) Referencia numerada con año (p.ej. "1. Friedman C, ... 2006.") —
+  //    activa también la sección biblio por si el encabezado faltaba
+  if(NOISE_FILTER.reNumberedRef.test(t)){
+    state.inBiblio = true;
+    return 'biblio';
+  }
+
+  // 4) Frontmatter (Autores:, DOI:, URL:, Recibido el..., etc.)
+  if(NOISE_FILTER.reFrontmatter.test(t)) return 'frontmatter';
+
+  // 5) Encabezado: párrafo corto (< minWords) que NO termina en signo de
+  //    oración completa. Atrapa tanto MAYÚSCULAS como Title Case y subtítulos
+  //    académicos (p.ej. "Segmentación", "EJEMPLOS DE USO DE PLN...", "COGNO:
+  //    el albor de un sistema..."). Los encabezados rara vez terminan con
+  //    punto final; los párrafos del cuerpo sí.
+  const wc = t.split(/\s+/).filter(Boolean).length;
+  if(wc < NOISE_FILTER.minWords && !/[.!?…]\s*$/.test(t)){
+    return 'header';
+  }
+
+  // 6) Fragmento corto: párrafo bajo el umbral que SÍ termina como oración
+  //    (cita aislada, frase suelta del cuerpo). Es contenido legítimo pero
+  //    demasiado breve para clasificación retórica significativa.
+  if(wc < NOISE_FILTER.minWords) return 'short';
+
+  return null;
+}
+
 function splitP(text){
   // ── Paso 1: intentar con doble salto \n\n (estructura fuerte del documento)
   const byDouble = text.split(/\n{2,}/).map(p=>p.trim()).filter(p=>p.length>0);
@@ -712,21 +786,55 @@ function splitP(text){
   return gs.filter(x=>x.trim().length>0).length ? gs.filter(x=>x.trim().length>0) : [text];
 }
 
+/**
+ * Versión anotada de splitP(): segmenta y clasifica cada párrafo como
+ * contenido analizable o ruido estructural usando classifyNoise() con
+ * state secuencial compartido (necesario para que la sección bibliográfica
+ * propague el flag inBiblio a todos los párrafos siguientes).
+ *
+ * Si NOISE_FILTER.enabled === false, devuelve todo con noiseKind=null
+ * (equivalente a desactivar el filtro sin tocar nada más).
+ *
+ * @param {string} text
+ * @returns {Array<{text:string, noiseKind:string|null}>}
+ */
+function splitPAnnotated(text){
+  const ps = splitP(text);
+  if(!NOISE_FILTER.enabled){
+    return ps.map(t => ({text:t, noiseKind:null}));
+  }
+  const state = {inBiblio:false};
+  return ps.map(t => ({text:t, noiseKind: classifyNoise(t, state)}));
+}
+
 /* ══════════════════════════════════════════════════════════════════════════
    HEURÍSTICA LOCAL — dos funciones independientes (espejo del backend)
    ══════════════════════════════════════════════════════════════════════════ */
 
 // T1 local: segmentación retórica
 function localSegment(text, mid){
-  const ps=splitP(text), n=ps.length;
+  const ann=splitPAnnotated(text), n=ann.length;
   let charOffset=0;
-  const segments=ps.map((p,i)=>{
+  const segments=ann.map((a,i)=>{
+    const p=a.text;
     const pos=i/Math.max(n-1,1);
     const wordCount=p.split(/\s+/).filter(Boolean).length;
-    const isShort=wordCount<4;
     const charStart=text.indexOf(p,charOffset);
     const charEnd=charStart>=0?charStart+p.length:charOffset+p.length;
     charOffset=charEnd;
+    const zone=pos<=0.20?'Inicio (0-20%)':pos<=0.80?'Desarrollo (20-80%)':'Cierre (80-100%)';
+
+    // Stub para párrafos descartados como ruido estructural
+    if(a.noiseKind){
+      return{index:i, text:p,
+        char_start:charStart, char_end:charEnd, word_count:wordCount,
+        relative_pos:+pos.toFixed(4), rhetorical_zone:zone,
+        t1_label:null, t1_label_name:null, t1_color:'#9CA3AF',
+        t1_confidence:0, low_confidence:true, isShort:true,
+        noiseKind:a.noiseKind};
+    }
+
+    const isShort=wordCount<4;
     let lbl,conf;
     if(isShort){
       lbl=['INTRO','BACK','METH','RES','DISC','CONC'][Math.min(5,Math.floor(pos*6))];
@@ -734,27 +842,39 @@ function localSegment(text, mid){
     }else{
       const r=t1classify(p,pos); lbl=r.lbl; conf=r.conf;
     }
-    const zone=pos<=0.20?'Inicio (0-20%)':pos<=0.80?'Desarrollo (20-80%)':'Cierre (80-100%)';
     return{index:i, text:p,
       char_start:charStart, char_end:charEnd, word_count:wordCount,
       relative_pos:+pos.toFixed(4), rhetorical_zone:zone,
       t1_label:lbl, t1_label_name:LEX.t1Meta[lbl]?.n||lbl,
       t1_color:LEX.t1Meta[lbl]?`rgb(${LEX.t1Meta[lbl].rgb})`:'#9CA3AF',
-      t1_confidence:+conf.toFixed(3), low_confidence:conf<=0.42, isShort};
+      t1_confidence:+conf.toFixed(3), low_confidence:conf<=0.42, isShort,
+      noiseKind:null};
   });
   const dist={};
-  segments.filter(s=>s.t1_confidence>0.42).forEach(s=>{dist[s.t1_label]=(dist[s.t1_label]||0)+1;});
+  segments.filter(s=>!s.noiseKind && s.t1_confidence>0.42).forEach(s=>{dist[s.t1_label]=(dist[s.t1_label]||0)+1;});
   const mname=mid==='heuristic'?'Heurístico (JS)':'Heurístico (fallback T1)';
   return{model_id:mid, model_name:mname, mode:'heuristic', elapsed_ms:3,
     segments,
     summary:{total_segments:n, t1_distribution:dist,
-      avg_confidence:+(segments.reduce((a,s)=>a+s.t1_confidence,0)/Math.max(n,1)).toFixed(3),
-      low_confidence_count:segments.filter(s=>s.low_confidence).length}};
+      avg_confidence:+(segments.filter(s=>!s.noiseKind).reduce((a,s)=>a+s.t1_confidence,0)/Math.max(segments.filter(s=>!s.noiseKind).length,1)).toFixed(3),
+      low_confidence_count:segments.filter(s=>s.low_confidence).length,
+      noise_count:segments.filter(s=>s.noiseKind).length}};
 }
 
 // T2 local: detección de contribuciones (recibe segmentos de T1)
 function localContributions(segments, mid){
   const results=segments.map(seg=>{
+    // Stub para ruido estructural: no se evalúa contribución
+    if(seg.noiseKind){
+      return{index:seg.index, is_contribution:false, confidence:0,
+        label:'NO_ES_CONTRIBUCION',
+        t1_label:seg.t1_label, t1_label_name:seg.t1_label_name,
+        t1_color:seg.t1_color, t1_confidence:seg.t1_confidence,
+        rhetorical_zone:seg.rhetorical_zone, rhetorical_context:'',
+        char_start:seg.char_start, char_end:seg.char_end,
+        word_count:seg.word_count, relative_pos:seg.relative_pos,
+        isShort:true, noiseKind:seg.noiseKind, text:seg.text};
+    }
     const {c,conf:t2c}=t2classify(seg.text);
     const ctx=c?`Contribución en '${seg.t1_label_name}' (${(seg.t1_confidence*100).toFixed(0)}% conf. retórica) · ${seg.rhetorical_zone}`:'';
     return{index:seg.index, is_contribution:c, confidence:+t2c.toFixed(3),
@@ -764,7 +884,7 @@ function localContributions(segments, mid){
       rhetorical_zone:seg.rhetorical_zone, rhetorical_context:ctx,
       char_start:seg.char_start, char_end:seg.char_end,
       word_count:seg.word_count, relative_pos:seg.relative_pos,
-      isShort:seg.isShort, text:seg.text};
+      isShort:seg.isShort, noiseKind:null, text:seg.text};
   });
   const detected=results.filter(r=>r.is_contribution);
   const nc=detected.length;
@@ -782,6 +902,127 @@ function localContributions(segments, mid){
 }
 
 // Combina los resultados T1+T2 en el formato interno del renderer
+/* ══════════════════════════════════════════════════════════════════════════
+   RE-INTERCALACIÓN DE RUIDO — el backend solo procesa los párrafos limpios,
+   pero el render debe mostrar el documento completo. Estas funciones
+   reconstruyen los arrays segments/contributions intercalando stubs
+   sintéticos para los párrafos descartados, manteniendo el orden original
+   del documento y re-indexando todo.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/**
+ * Genera la zona retórica a partir de la posición relativa (espejo del backend).
+ * @param {number} rel - posición relativa en [0,1]
+ */
+function _zoneFromPos(rel){
+  return rel < 0.20 ? 'Inicio (0-20%)'
+       : rel > 0.80 ? 'Cierre (80-100%)'
+                    : 'Desarrollo (20-80%)';
+}
+
+/**
+ * Re-intercala stubs de ruido entre los segments analizados por el backend.
+ * Recalcula índices, char offsets sobre el texto ORIGINAL (no el limpio),
+ * posición relativa y zona retórica para que el render quede consistente.
+ *
+ * Si el backend devolvió un número de segments distinto al esperado, lanza
+ * warning en consola y alinea por el mínimo común para evitar crashes.
+ *
+ * @param {Array<{text:string, noiseKind:string|null}>} annotated
+ * @param {{segments:Array, summary:Object}} segData
+ * @param {string} originalText
+ * @returns {{segments:Array, summary:Object}}
+ */
+function interleaveNoise(annotated, segData, originalText){
+  const cleanSegs = segData.segments || [];
+  const nClean = annotated.filter(p => !p.noiseKind).length;
+  if(cleanSegs.length !== nClean){
+    console.warn(`[noise-filter] El backend devolvió ${cleanSegs.length} segmentos pero se esperaban ${nClean}. ` +
+      'Las posiciones pueden desalinearse; revisa que ningún párrafo enviado contuviera "\\n\\n" interno.');
+  }
+
+  const segments = [];
+  const N = annotated.length;
+  let charOffset = 0;
+  let bIdx = 0;
+
+  for(let i = 0; i < N; i++){
+    const a = annotated[i];
+    const start = originalText.indexOf(a.text, charOffset);
+    const charStart = start >= 0 ? start : charOffset;
+    const charEnd   = charStart + a.text.length;
+    charOffset = charEnd;
+
+    const relPos = N > 1 ? +(i/(N-1)).toFixed(4) : 0;
+    const zone   = _zoneFromPos(relPos);
+
+    if(a.noiseKind){
+      const wc = a.text.split(/\s+/).filter(Boolean).length;
+      segments.push({
+        index: i, text: a.text,
+        t1_label: null, t1_label_name: null, t1_confidence: 0,
+        isShort: true, low_confidence: true,
+        noiseKind: a.noiseKind,
+        char_start: charStart, char_end: charEnd,
+        word_count: wc, relative_pos: relPos, rhetorical_zone: zone,
+      });
+    } else {
+      const bs = cleanSegs[bIdx++] || {};
+      segments.push({
+        ...bs,
+        index: i,
+        char_start: charStart, char_end: charEnd,
+        relative_pos: relPos, rhetorical_zone: zone,
+        noiseKind: null,
+      });
+    }
+  }
+
+  // Recalcular distribución T1 (solo cuenta los párrafos analizables)
+  const dist = {};
+  for(const s of segments){
+    if(!s.noiseKind && s.t1_label){
+      dist[s.t1_label] = (dist[s.t1_label] || 0) + 1;
+    }
+  }
+
+  return {
+    ...segData,
+    segments,
+    summary: {
+      ...(segData.summary || {}),
+      t1_distribution: dist,
+      total_segments: segments.length,
+      noise_count: segments.filter(s => s.noiseKind).length,
+    },
+  };
+}
+
+/**
+ * Inserta entradas de contribución vacías para los stubs de ruido, manteniendo
+ * los índices alineados con los segments re-intercalados.
+ *
+ * @param {Array<{text:string, noiseKind:string|null}>} annotated
+ * @param {{contributions:Array, summary:Object}} contribData
+ * @returns {{contributions:Array, summary:Object}}
+ */
+function interleaveContribStubs(annotated, contribData){
+  const real = contribData.contributions || [];
+  const contributions = [];
+  let cIdx = 0;
+  for(let i = 0; i < annotated.length; i++){
+    if(annotated[i].noiseKind){
+      contributions.push({
+        index: i, is_contribution: false, confidence: 0, rhetorical_context: '',
+      });
+    } else {
+      const r = real[cIdx++] || {};
+      contributions.push({ ...r, index: i });
+    }
+  }
+  return { ...contribData, contributions };
+}
+
 function mergeResults(segData, contribData){
   const contribMap={};
   contribData.contributions.forEach(c=>{contribMap[c.index]=c;});
@@ -792,7 +1033,8 @@ function mergeResults(segData, contribData){
       i:s.index, text:s.text,
       t1:s.t1_label, t1n:s.t1_label_name, t1c:s.t1_confidence,
       t2:c.is_contribution, t2c:c.confidence,
-      isShort:s.isShort||s.low_confidence||false,
+      isShort:s.isShort||false,
+      noiseKind:s.noiseKind||null,
       charStart:s.char_start, charEnd:s.char_end,
       wordCount:s.word_count, posRel:s.relative_pos,
       zone:s.rhetorical_zone, page,
@@ -839,22 +1081,53 @@ async function _doAnalyze(text){
   btn.disabled=true;ic.innerHTML='<div class="spin"></div>';bt.textContent='Analizando…';
   try{
     let data;
+
+    // ── Pre-segmentación + filtrado de ruido estructural (cliente) ─────────
+    // El backend solo procesa los párrafos analizables; el render reconstruye
+    // el documento completo intercalando stubs para el ruido (integridad).
+    const annotated = splitPAnnotated(text);
+    // Saneo defensivo: ningún párrafo individual debe contener "\n\n" interno,
+    // o el backend lo re-dividiría rompiendo el contrato de conteo.
+    annotated.forEach(p => { p.text = p.text.replace(/\n{2,}/g, '\n'); });
+    const cleanParas = annotated.filter(p => !p.noiseKind).map(p => p.text);
+    const cleanText  = cleanParas.join('\n\n');
+
+    if(NOISE_FILTER.enabled){
+      const noiseCount = annotated.length - cleanParas.length;
+      if(noiseCount > 0){
+        const breakdown = annotated.reduce((a,p) => {
+          if(p.noiseKind) a[p.noiseKind] = (a[p.noiseKind]||0)+1;
+          return a;
+        }, {});
+        console.info(`[noise-filter] ${noiseCount}/${annotated.length} párrafos descartados:`,
+          Object.entries(breakdown).map(([k,v])=>`${k}=${v}`).join(', '));
+      }
+    }
+    if(cleanParas.length === 0){
+      alert('No se detectó contenido analizable en el documento (solo metadatos, encabezados o bibliografía). ' +
+            'Desactiva el filtro de ruido si crees que es un error.');
+      return;
+    }
+
     try{
       // ── Paso 1: Tarea 1 — Segmentación retórica ──────────────────────────
       const r1=await fetch(API+'/api/segment',{method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({text, model_id:selModel})});
+        body:JSON.stringify({text: cleanText, model_id:selModel})});
       if(!r1.ok) throw new Error(`T1 error: ${r1.status}`);
-      const segData=await r1.json();
+      const rawSegData=await r1.json();
 
       // ── Paso 2: Tarea 2 — Detección de contribuciones ────────────────────
       // Enviamos los segmentos de T1 directamente (incluyen contexto retórico)
       const r2=await fetch(API+'/api/contributions',{method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({fragments:segData.segments, model_id:selModel2})});
+        body:JSON.stringify({fragments:rawSegData.segments, model_id:selModel2})});
       if(!r2.ok) throw new Error(`T2 error: ${r2.status}`);
-      const contribData=await r2.json();
+      const rawContribData=await r2.json();
 
+      // ── Re-intercalar ruido para mantener integridad visual del documento ─
+      const segData    = interleaveNoise(annotated, rawSegData, text);
+      const contribData= interleaveContribStubs(annotated, rawContribData);
       data=mergeResults(segData,contribData);
     }catch(e){
       // Fallback: heurística local también en dos pasos
@@ -1016,6 +1289,13 @@ function renderSentences(text, t2pct){
   }).join('');
 }
 
+const NOISE_LABELS = {
+  biblio:      'Bibliografía',
+  header:      'Encabezado',
+  frontmatter: 'Metadatos',
+  short:       'Fragmento corto',
+};
+
 function renderP(p){
   const m=LEX.t1Meta[p.t1]||{rgb:'128,128,128',n:p.t1};
   const LOW_CONF = p.t1c <= 0.42;
@@ -1054,12 +1334,15 @@ function renderP(p){
   // Cuerpo: confianza T2 va en title de cada oración resaltada, NO en el tooltip del párrafo
   const body = isC ? renderSentences(p.text, t2pctOrNull) : esc(p.text);
 
-  // Etiqueta tooltip T1
-  const tipLabel = SHORT
-    ? 'Fragmento corto'
-    : LOW_CONF
-      ? `Posible ${m.n}`
-      : m.n;
+  // Etiqueta tooltip T1: el ruido estructural tiene prioridad sobre los flags
+  // legados SHORT/LOW_CONF para que el usuario vea la razón real del descarte.
+  const tipLabel = p.noiseKind
+    ? (NOISE_LABELS[p.noiseKind] || 'Ruido estructural')
+    : SHORT
+      ? 'Fragmento corto'
+      : LOW_CONF
+        ? `Posible ${m.n}`
+        : m.n;
 
   const _dc=(LOW_CONF||SHORT)?"__low":p.t1;
   return `<div class="ap" data-t1="${_dc}" data-t2="${isC ? 'true' : 'false'}"
@@ -1076,7 +1359,9 @@ function renderP(p){
           </div>`:''}
       ${isC
         ?`<span class="bt2y">${contrLabel}</span>`
-        :`<span class="bt2n">sin contribución</span>`}
+        : p.noiseKind
+          ?`<span class="bt2n">no analizado</span>`
+          :`<span class="bt2n">sin contribución</span>`}
     </div>
     ${body}
   </div>`;
